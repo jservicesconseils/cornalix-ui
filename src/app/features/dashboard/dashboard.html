@@ -14,10 +14,9 @@
 
 <div class="stat-grid">
   <div class="card stat-card">
-    <div class="score-ring" [style.--pct]="snapshot.overallScore">
-      <span>{{ snapshot.overallScore }}%</span>
-    </div>
+    <div class="score-ring" [style.--pct]="snapshot.overallScore"></div>
     <div>
+      <div class="stat-value mono">{{ snapshot.overallScore }}%</div>
       <div class="stat-label">Score global</div>
       <div class="stat-delta positive"><i class="pi pi-arrow-up"></i>+{{ snapshot.scoreDelta }}%</div>
     </div>
@@ -26,7 +25,7 @@
   <div class="card stat-card">
     <i class="pi pi-check-square stat-icon"></i>
     <div>
-      <div class="stat-value">{{ snapshot.answeredQuestions }} / {{ snapshot.totalQuestions }}</div>
+      <div class="stat-value mono">{{ snapshot.answeredQuestions }} / {{ snapshot.totalQuestions }}</div>
       <div class="stat-label">Questions répondues</div>
       <div class="stat-delta positive"><i class="pi pi-check"></i>70 %</div>
     </div>
@@ -35,7 +34,7 @@
   <div class="card stat-card">
     <i class="pi pi-sitemap stat-icon"></i>
     <div>
-      <div class="stat-value">{{ snapshot.nistDomains }}</div>
+      <div class="stat-value mono">{{ snapshot.nistDomains }}</div>
       <div class="stat-label">Domaines NIST</div>
       <div class="stat-delta positive"><i class="pi pi-check"></i>100 %</div>
     </div>
@@ -44,7 +43,7 @@
   <div class="card stat-card">
     <i class="pi pi-shield stat-icon"></i>
     <div>
-      <div class="stat-value">{{ snapshot.cisControlsCovered }}</div>
+      <div class="stat-value mono">{{ snapshot.cisControlsCovered }}</div>
       <div class="stat-label">Contrôles CIS</div>
       <div class="stat-delta positive"><i class="pi pi-check"></i>100 %</div>
     </div>

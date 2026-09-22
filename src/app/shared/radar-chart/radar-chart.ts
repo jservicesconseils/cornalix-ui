@@ -61,9 +61,10 @@ const RING_STEPS = [1, 0.66, 0.33];
       height: auto;
     }
     .axis-label {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      fill: var(--ink-soft);
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      fill: #344054;
     }
   `,
 })
