@@ -9,6 +9,7 @@ import { providePrimeNG } from 'primeng/config';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
+import { provideLucideConfig } from '@lucide/angular';
 
 import { routes } from './app.routes';
 import { CornalixPreset } from './core/theme/cornalix-preset';
@@ -33,6 +34,7 @@ export const appConfig: ApplicationConfig = {
         options: { darkModeSelector: false },
       },
     }),
+    provideLucideConfig({ strokeWidth: 1.75 }),
     provideTranslateService({
       loader: {
         provide: TranslateLoader,

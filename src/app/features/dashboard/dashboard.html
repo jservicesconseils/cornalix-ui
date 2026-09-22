@@ -6,7 +6,7 @@
   <div class="page-header-meta">
     <span class="last-updated mono">Dernière mise à jour : {{ snapshot.lastUpdated }}</span>
     <a class="btn-primary" routerLink="/questionnaire">
-      <i class="pi pi-refresh"></i>
+      <svg lucideRefreshCw [size]="16"></svg>
       Relancer le diagnostic
     </a>
   </div>
@@ -18,34 +18,34 @@
     <div>
       <div class="stat-value mono">{{ snapshot.overallScore }}%</div>
       <div class="stat-label">Score global</div>
-      <div class="stat-delta positive"><i class="pi pi-arrow-up"></i>+{{ snapshot.scoreDelta }}%</div>
+      <div class="stat-delta positive"><svg lucideTrendingUp [size]="12"></svg>+{{ snapshot.scoreDelta }}%</div>
     </div>
   </div>
 
   <div class="card stat-card">
-    <i class="pi pi-check-square stat-icon"></i>
+    <span class="stat-icon"><svg lucideClipboardCheck [size]="20"></svg></span>
     <div>
       <div class="stat-value mono">{{ snapshot.answeredQuestions }} / {{ snapshot.totalQuestions }}</div>
       <div class="stat-label">Questions répondues</div>
-      <div class="stat-delta positive"><i class="pi pi-check"></i>70 %</div>
+      <div class="stat-delta positive"><svg lucideCheck [size]="12"></svg>70 %</div>
     </div>
   </div>
 
   <div class="card stat-card">
-    <i class="pi pi-sitemap stat-icon"></i>
+    <span class="stat-icon"><svg lucideNetwork [size]="20"></svg></span>
     <div>
       <div class="stat-value mono">{{ snapshot.nistDomains }}</div>
       <div class="stat-label">Domaines NIST</div>
-      <div class="stat-delta positive"><i class="pi pi-check"></i>100 %</div>
+      <div class="stat-delta positive"><svg lucideCheck [size]="12"></svg>100 %</div>
     </div>
   </div>
 
   <div class="card stat-card">
-    <i class="pi pi-shield stat-icon"></i>
+    <span class="stat-icon"><svg lucideShieldCheck [size]="20"></svg></span>
     <div>
       <div class="stat-value mono">{{ snapshot.cisControlsCovered }}</div>
       <div class="stat-label">Contrôles CIS</div>
-      <div class="stat-delta positive"><i class="pi pi-check"></i>100 %</div>
+      <div class="stat-delta positive"><svg lucideCheck [size]="12"></svg>100 %</div>
     </div>
   </div>
 </div>
@@ -73,32 +73,32 @@
         </div>
       }
     </div>
-    <a class="see-all" routerLink="/rapports">Voir les 18 contrôles <i class="pi pi-arrow-right"></i></a>
+    <a class="see-all" routerLink="/rapports">Voir les 18 contrôles <svg lucideArrowRight [size]="13"></svg></a>
   </div>
 
   <div class="card">
     <div class="card-title">Actions rapides</div>
     <nav class="quick-actions">
       <a routerLink="/questionnaire">
-        <span class="quick-action-label"><i class="pi pi-list-check"></i> Continuer le questionnaire</span>
-        <i class="pi pi-arrow-right"></i>
+        <span class="quick-action-label"><svg lucideListChecks [size]="16"></svg> Continuer le questionnaire</span>
+        <svg lucideArrowRight [size]="13"></svg>
       </a>
       <a routerLink="/rapports">
-        <span class="quick-action-label"><i class="pi pi-chart-bar"></i> Voir le rapport</span>
-        <i class="pi pi-arrow-right"></i>
+        <span class="quick-action-label"><svg lucideChartBar [size]="16"></svg> Voir le rapport</span>
+        <svg lucideArrowRight [size]="13"></svg>
       </a>
       <a routerLink="/utilisateurs">
-        <span class="quick-action-label"><i class="pi pi-users"></i> Gérer les utilisateurs</span>
-        <i class="pi pi-arrow-right"></i>
+        <span class="quick-action-label"><svg lucideUsers [size]="16"></svg> Gérer les utilisateurs</span>
+        <svg lucideArrowRight [size]="13"></svg>
       </a>
       <a href="#">
-        <span class="quick-action-label"><i class="pi pi-cog"></i> Paramètres de l'organisation</span>
-        <i class="pi pi-arrow-right"></i>
+        <span class="quick-action-label"><svg lucideSettings [size]="16"></svg> Paramètres de l'organisation</span>
+        <svg lucideArrowRight [size]="13"></svg>
       </a>
     </nav>
 
     <div class="next-step">
-      <div class="next-step-title"><i class="pi pi-flag"></i> Prochaine étape</div>
+      <div class="next-step-title"><svg lucideFlag [size]="14"></svg> Prochaine étape</div>
       <p>Complétez les questions restantes pour obtenir un rapport complet.</p>
     </div>
   </div>

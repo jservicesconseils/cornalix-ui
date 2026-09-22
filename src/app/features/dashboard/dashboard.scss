@@ -25,7 +25,6 @@
 }
 
 .stat-icon {
-  font-size: 22px;
   color: var(--accent);
   width: 40px;
   height: 40px;
@@ -192,9 +191,9 @@
     color: var(--ink);
     border-bottom: 1px solid var(--line);
 
-    > i {
+    > svg {
       color: var(--ink-faint);
-      font-size: 11px;
+      flex-shrink: 0;
     }
 
     &:last-of-type {
@@ -205,11 +204,11 @@
       background: var(--accent-tint);
       color: var(--accent-strong);
 
-      > i {
+      > svg {
         color: var(--accent-strong);
       }
 
-      .quick-action-label i {
+      .quick-action-label svg {
         color: var(--accent-strong);
       }
     }
@@ -221,11 +220,9 @@
   align-items: center;
   gap: 10px;
 
-  i {
-    font-size: 16px;
+  svg {
     color: var(--accent);
-    width: 18px;
-    text-align: center;
+    flex-shrink: 0;
   }
 }
 
