@@ -1,15 +1,16 @@
 :root {
-  --paper: #f1f5f3;
+  --paper: #f8faf9;
   --surface: #ffffff;
-  --surface-alt: #e6ece9;
-  --ink: #132523;
-  --ink-soft: #48605c;
-  --ink-faint: #7c928d;
-  --line: #cbd8d2;
-  --line-strong: #a9bdb5;
+  --surface-alt: #f2f4f7;
+  --ink: #101828;
+  --ink-soft: #475467;
+  --ink-faint: #667085;
+  --line: #eaecf0;
+  --line-strong: #d0d5dd;
   --accent: #0e7c6e;
   --accent-strong: #0a5c52;
   --accent-soft: #dcefea;
+  --accent-tint: #f0fdf9;
   --yes: #2f8f5b;
   --yes-soft: #e3f3ea;
   --partial: #b9852a;
@@ -17,9 +18,11 @@
   --no: #b14a3a;
   --no-soft: #f7e4e0;
 
-  --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
-  --font-body: 'Source Serif 4', Georgia, serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'JetBrains Mono', monospace;
+
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.05);
 }
 
 * {
@@ -42,10 +45,13 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-weight: 600;
   color: var(--ink);
   margin: 0;
+}
+
+h1 {
+  letter-spacing: -0.02em;
 }
 
 a {
@@ -70,23 +76,25 @@ a {
 }
 
 .page-subtitle {
-  color: var(--ink-soft);
+  color: var(--ink-faint);
   font-size: 14px;
+  font-weight: 400;
   margin: 6px 0 0;
 }
 
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
   padding: 22px 24px;
 }
 
 .card-title {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--ink-soft);
   margin-bottom: 12px;
@@ -103,9 +111,8 @@ a {
   background: var(--accent);
   color: #fff;
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 14px;
-  letter-spacing: 0.02em;
   cursor: pointer;
 
   &:hover {
@@ -124,7 +131,7 @@ a {
   background: var(--surface);
   color: var(--ink);
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   cursor: pointer;
 
