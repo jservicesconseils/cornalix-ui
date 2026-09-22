@@ -30,7 +30,7 @@
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 20px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .category-list {
@@ -163,7 +163,7 @@
 .question-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
+  margin-top: auto;
 
   button:disabled {
     opacity: 0.4;
