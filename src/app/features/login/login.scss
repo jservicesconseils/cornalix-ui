@@ -14,12 +14,12 @@
   background: #06302c;
 }
 
-// Photo de Montreal, prise en ete (credits dans public/images/CREDITS.md)
+// Photo de Vancouver (credits dans public/images/CREDITS.md)
 .hero-photo {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: url('/images/montreal-skyline.jpg') center center / cover no-repeat;
+  background: url('/images/vancouver-skyline.jpg') center center / cover no-repeat;
 }
 
 // Voile degrade vert Cornalix par-dessus la photo (opaque en haut, laisse
