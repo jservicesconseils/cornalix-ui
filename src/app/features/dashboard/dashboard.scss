@@ -25,13 +25,12 @@
 }
 
 .stat-icon {
-  color: var(--accent);
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent-soft);
+  background: var(--surface-alt);
   border-radius: 10px;
   flex-shrink: 0;
 }
