@@ -10,10 +10,12 @@
   },
   "login": {
     "tagline": "Votre cybersécurité, simplifiée.",
+    "byline": "Par J Services Conseils inc.",
     "subtitle": "Une cybersécurité plus forte pour des PME plus confiantes.",
     "welcome": "Bon retour !",
     "instructions": "Connectez-vous à votre compte Cornalix.",
     "email": "Courriel",
+    "emailPlaceholder": "votre@email.com",
     "password": "Mot de passe",
     "rememberMe": "Se souvenir de moi",
     "forgotPassword": "Mot de passe oublié ?",

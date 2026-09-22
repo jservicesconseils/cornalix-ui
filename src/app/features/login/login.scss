@@ -1,161 +1,175 @@
 :host {
   display: block;
-  height: 100vh;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .login-page {
+  position: relative;
+  min-height: 100vh;
   display: flex;
-  height: 100%;
+  align-items: center;
+  overflow: hidden;
+  padding: 56px 64px;
+  background: linear-gradient(115deg, #06302c 0%, #0c5c53 30%, #1f8f80 58%, #6ecec0 82%, #a9e6dc 100%);
 }
 
-.hero {
-  flex: 0 0 42%;
-  background: linear-gradient(160deg, var(--accent-strong) 0%, var(--accent) 55%, #134e4a 100%);
-  color: #fff;
-  padding: 56px 48px 40px;
+.skyline-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 46%;
+  z-index: 0;
+}
+
+.lang-switch {
+  position: absolute;
+  top: 28px;
+  right: 40px;
+  z-index: 2;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    padding: 2px;
+
+    &.active {
+      color: #ffffff;
+    }
+  }
 }
 
 .hero-content {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
+  position: relative;
   z-index: 1;
+  flex: 1 1 54%;
+  max-width: 560px;
+  padding-right: 48px;
+  color: #fff;
 }
 
 .hero-brand {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
+  text-align: center;
+  gap: 6px;
+  margin-bottom: 40px;
 }
 
-.hero-name {
-  font-family: var(--font-display);
+.hero-logo {
+  width: 64px;
+  height: 77px;
+  margin-bottom: 10px;
+}
+
+.hero-wordmark {
+  font-size: 30px;
   font-weight: 800;
-  font-size: 24px;
   letter-spacing: 0.04em;
 }
 
-.hero-subname {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
 .hero-tagline {
-  font-family: var(--font-display);
+  font-size: 16px;
   font-weight: 700;
-  font-size: 34px;
-  line-height: 1.15;
-  max-width: 360px;
 }
 
-.hero-subtitle {
-  font-family: var(--font-body);
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 340px;
-  margin: 0;
+.hero-byline {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.hero-pitch {
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 0 26px;
+    max-width: 420px;
+    color: #ffffff;
+  }
 }
 
 .hero-benefits {
   list-style: none;
-  margin: 8px 0 0;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 
   li {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 600;
+    gap: 14px;
+    font-size: 15px;
+    font-weight: 500;
   }
+}
+
+.benefit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  flex-shrink: 0;
 
   i {
+    font-size: 15px;
     color: #fff;
-    font-size: 16px;
   }
 }
 
 .hero-footer {
   position: relative;
   z-index: 1;
-
-  p {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    color: rgba(255, 255, 255, 0.65);
-    margin: 10px 0 0;
-  }
+  margin: 48px 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 300px;
 }
 
-.skyline {
-  width: 100%;
-  height: 70px;
-  display: block;
-}
-
-.form-side {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(180deg, var(--paper) 0%, var(--surface-alt) 100%);
-  padding: 40px;
+.login-card-wrap {
   position: relative;
-}
-
-.lang-switch {
-  position: absolute;
-  top: 28px;
-  right: 36px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--ink-faint);
-
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: inherit;
-    color: var(--ink-faint);
-    padding: 2px;
-
-    &.active {
-      color: var(--accent-strong);
-      font-weight: 600;
-    }
-  }
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 460px;
+  max-width: 100%;
+  margin-left: auto;
 }
 
 .login-card {
-  width: 420px;
-  max-width: 100%;
+  width: 100%;
   background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 32px;
+  border-radius: 22px;
+  padding: 36px 36px 32px;
   display: flex;
   flex-direction: column;
   gap: 18px;
   box-shadow:
-    0 1px 2px rgba(19, 37, 35, 0.06),
-    0 8px 24px -12px rgba(19, 37, 35, 0.18);
+    0 20px 25px -5px rgba(4, 20, 18, 0.25),
+    0 8px 10px -6px rgba(4, 20, 18, 0.2);
 
   h2 {
-    font-size: 22px;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0;
   }
 }
 
@@ -171,16 +185,30 @@
   gap: 8px;
 
   label {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  > i {
+    position: absolute;
+    left: 14px;
+    color: var(--ink-faint);
+    font-size: 15px;
+    z-index: 1;
+    pointer-events: none;
   }
 
   input,
   ::ng-deep .full-width-password input {
     width: 100%;
+    padding-left: 40px;
   }
 }
 
@@ -188,7 +216,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 13px;
+  font-size: 13.5px;
 }
 
 .remember-me {
@@ -199,9 +227,8 @@
 }
 
 .forgot-link {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--ink-faint);
+  color: var(--accent-strong);
+  font-weight: 600;
 }
 
 .btn-primary {
@@ -210,15 +237,13 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  padding: 13px 20px;
-  border-radius: 8px;
+  padding: 14px 20px;
+  border-radius: 10px;
   border: none;
   background: var(--accent);
   color: #fff;
-  font-family: var(--font-display);
   font-weight: 700;
   font-size: 16px;
-  letter-spacing: 0.02em;
   cursor: pointer;
 
   &:hover {
@@ -230,10 +255,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-faint);
-  text-transform: uppercase;
 
   &::before,
   &::after {
@@ -250,14 +273,13 @@
   justify-content: center;
   gap: 10px;
   width: 100%;
-  padding: 11px 20px;
-  border-radius: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
   border: 1px solid var(--line-strong);
   background: var(--surface);
   color: var(--ink);
-  font-family: var(--font-body);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 14.5px;
   cursor: pointer;
 
   &:hover {
@@ -267,19 +289,39 @@
 
 .demo-hint {
   font-size: 10.5px;
+  font-family: var(--font-mono);
   color: var(--ink-faint);
   text-align: center;
   line-height: 1.5;
+  margin: 0;
 }
 
 .no-account {
   text-align: center;
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--ink-faint);
   margin: 0;
 
   a {
     color: var(--accent-strong);
-    font-weight: 600;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 900px) {
+  .login-page {
+    flex-direction: column;
+    padding: 40px 24px;
+  }
+
+  .hero-content {
+    padding-right: 0;
+    max-width: 100%;
+    margin-bottom: 32px;
+  }
+
+  .login-card-wrap {
+    width: 100%;
+    margin-left: 0;
   }
 }
