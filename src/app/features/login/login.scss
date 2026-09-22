@@ -14,12 +14,12 @@
   background: #06302c;
 }
 
-// Photo de Montreal (CC0, credits dans public/images/CREDITS.md)
+// Photo de Montreal, prise en ete (credits dans public/images/CREDITS.md)
 .hero-photo {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: url('/images/montreal-skyline.jpg') center 74% / cover no-repeat;
+  background: url('/images/montreal-skyline.jpg') center center / cover no-repeat;
 }
 
 // Voile degrade vert Cornalix par-dessus la photo (opaque en haut, laisse
@@ -166,6 +166,19 @@
   font-size: 13px;
   color: rgba(255, 255, 255, 0.85);
   max-width: 300px;
+}
+
+.photo-credit {
+  position: absolute;
+  left: 16px;
+  bottom: 8px;
+  z-index: 1;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.85);
+  }
 }
 
 .login-card-wrap {
