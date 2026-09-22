@@ -1,12 +1,41 @@
 import { Component, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import {
+  LucideClipboardCheck,
+  LucideNetwork,
+  LucideShieldCheck,
+  LucideRefreshCw,
+  LucideTrendingUp,
+  LucideCheck,
+  LucideListChecks,
+  LucideChartBar,
+  LucideUsers,
+  LucideSettings,
+  LucideArrowRight,
+  LucideFlag,
+} from '@lucide/angular';
 
 import { DEMO_DASHBOARD } from '../../core/data/demo-data';
 import { RadarChart } from '../../shared/radar-chart/radar-chart';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, RadarChart],
+  imports: [
+    RouterLink,
+    RadarChart,
+    LucideClipboardCheck,
+    LucideNetwork,
+    LucideShieldCheck,
+    LucideRefreshCw,
+    LucideTrendingUp,
+    LucideCheck,
+    LucideListChecks,
+    LucideChartBar,
+    LucideUsers,
+    LucideSettings,
+    LucideArrowRight,
+    LucideFlag,
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
