@@ -1,8 +1,6 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Store } from '@ngrx/store';
 
-import { tenantFeature } from '../../core/state/tenant/tenant.reducer';
 import { DEMO_DASHBOARD } from '../../core/data/demo-data';
 import { RadarChart } from '../../shared/radar-chart/radar-chart';
 
@@ -13,9 +11,6 @@ import { RadarChart } from '../../shared/radar-chart/radar-chart';
   styleUrl: './dashboard.scss',
 })
 export class Dashboard {
-  private readonly store = inject(Store);
-
-  protected readonly currentOrganization = this.store.selectSignal(tenantFeature.selectCurrentOrganization);
   protected readonly snapshot = DEMO_DASHBOARD;
 
   protected readonly radarData = computed(() =>
