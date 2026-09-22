@@ -90,7 +90,12 @@
   display: grid;
   grid-template-columns: 1.1fr 1fr 0.9fr;
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
+
+  > .card {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .legend {
@@ -226,7 +231,7 @@
 }
 
 .next-step {
-  margin-top: 16px;
+  margin-top: auto;
   padding: 14px 16px;
   border-radius: 10px;
   background: var(--yes-soft);
