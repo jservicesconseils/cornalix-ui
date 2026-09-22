@@ -232,6 +232,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 
   > i {
     position: absolute;
@@ -242,10 +243,18 @@
     pointer-events: none;
   }
 
-  input,
-  ::ng-deep .full-width-password input {
+  input {
     width: 100%;
     padding-left: 40px;
+  }
+
+  ::ng-deep .full-width-password {
+    width: 100%;
+
+    input {
+      width: 100%;
+      padding-left: 40px;
+    }
   }
 }
 
