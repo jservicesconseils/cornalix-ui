@@ -1,18 +1,15 @@
 <div class="page-header">
   <div>
     <h1>Tableau de bord</h1>
-    <p class="page-subtitle">
-      Vue d'ensemble de votre posture de cybersécurité
-      @if (currentOrganization(); as org) {
-        · <span class="mono">{{ org.name }}</span>
-      }
-      · Dernière mise à jour : {{ snapshot.lastUpdated }}
-    </p>
+    <p class="page-subtitle">Vue d'ensemble de votre posture de cybersécurité</p>
   </div>
-  <a class="btn-primary" routerLink="/questionnaire">
-    <i class="pi pi-refresh"></i>
-    Relancer le diagnostic
-  </a>
+  <div class="page-header-meta">
+    <span class="last-updated mono">Dernière mise à jour : {{ snapshot.lastUpdated }}</span>
+    <a class="btn-primary" routerLink="/questionnaire">
+      <i class="pi pi-refresh"></i>
+      Relancer le diagnostic
+    </a>
+  </div>
 </div>
 
 <div class="stat-grid">
