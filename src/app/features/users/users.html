@@ -1,0 +1,81 @@
+<div class="page-header">
+  <div>
+    <h1>Utilisateurs</h1>
+    <p class="page-subtitle">Gérez les accès de votre organisation.</p>
+  </div>
+  <button type="button" class="btn-primary">
+    <i class="pi pi-plus"></i>
+    Inviter un utilisateur
+  </button>
+</div>
+
+<div class="filter-row">
+  <div class="chip-group">
+    @for (chip of filterChips(); track chip.key) {
+      <button
+        type="button"
+        class="chip"
+        [class.active]="roleFilter() === chip.key"
+        (click)="roleFilter.set(chip.key)"
+      >
+        {{ chip.label }} ({{ chip.count }})
+      </button>
+    }
+  </div>
+
+  <span class="search-input">
+    <i class="pi pi-search"></i>
+    <input
+      pInputText
+      type="text"
+      placeholder="Rechercher un utilisateur..."
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)"
+    />
+  </span>
+</div>
+
+<div class="card">
+  <p-table [value]="filteredMembers()" dataKey="id" [rowHover]="true">
+    <ng-template #header>
+      <tr>
+        <th>Nom</th>
+        <th>Rôle</th>
+        <th>Courriel</th>
+        <th>Statut</th>
+        <th style="width: 48px"></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-member>
+      <tr>
+        <td>
+          <div class="member-cell">
+            <p-avatar [label]="member.initials" shape="circle" />
+            <span>{{ member.name }}</span>
+          </div>
+        </td>
+        <td>
+          <span class="role-tag">{{ roleLabel(member.role) }}</span>
+        </td>
+        <td class="mono email-cell">{{ member.email }}</td>
+        <td>
+          @if (member.status === 'ACTIVE') {
+            <span class="badge badge--yes">Actif</span>
+          } @else {
+            <span class="badge badge--partial">En attente</span>
+          }
+        </td>
+        <td>
+          <button type="button" class="icon-btn-flat" aria-label="Plus d'options">
+            <i class="pi pi-ellipsis-v"></i>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="5" class="empty-cell">Aucun utilisateur ne correspond à votre recherche.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

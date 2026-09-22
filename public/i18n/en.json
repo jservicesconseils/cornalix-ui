@@ -1,0 +1,32 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "portfolio": "Portfolio",
+    "questionnaire": "Questionnaire",
+    "reports": "Reports",
+    "users": "Users",
+    "settings": "Settings",
+    "help": "Need help? Help center"
+  },
+  "login": {
+    "tagline": "Your cybersecurity, simplified.",
+    "subtitle": "Stronger cybersecurity for more confident SMEs.",
+    "welcome": "Welcome back!",
+    "instructions": "Sign in to your Cornalix account.",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign in",
+    "or": "or",
+    "google": "Sign in with Google",
+    "noAccount": "Don't have an account?",
+    "contactUs": "Contact our team",
+    "benefits": {
+      "assess": "Assess your risks",
+      "measure": "Measure your maturity",
+      "act": "Take action"
+    },
+    "footer": "Quebec businesses, more secure today."
+  }
+}

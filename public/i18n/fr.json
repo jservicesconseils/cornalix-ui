@@ -1,0 +1,32 @@
+{
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "portfolio": "Portefeuille",
+    "questionnaire": "Questionnaire",
+    "reports": "Rapports",
+    "users": "Utilisateurs",
+    "settings": "Paramètres",
+    "help": "Besoin d'aide ? Centre d'aide"
+  },
+  "login": {
+    "tagline": "Votre cybersécurité, simplifiée.",
+    "subtitle": "Une cybersécurité plus forte pour des PME plus confiantes.",
+    "welcome": "Bon retour !",
+    "instructions": "Connectez-vous à votre compte Cornalix.",
+    "email": "Courriel",
+    "password": "Mot de passe",
+    "rememberMe": "Se souvenir de moi",
+    "forgotPassword": "Mot de passe oublié ?",
+    "submit": "Se connecter",
+    "or": "ou",
+    "google": "Se connecter avec Google",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "contactUs": "Contacter notre équipe",
+    "benefits": {
+      "assess": "Évaluez vos risques",
+      "measure": "Mesurez votre maturité",
+      "act": "Passez à l'action"
+    },
+    "footer": "Des entreprises québécoises plus sécurisées, aujourd'hui."
+  }
+}

@@ -1,0 +1,97 @@
+<div class="page-header">
+  <div>
+    <h1>Tableau de bord</h1>
+    <p class="page-subtitle">
+      Vue d'ensemble de votre posture de cybersécurité
+      @if (currentOrganization(); as org) {
+        · <span class="mono">{{ org.name }}</span>
+      }
+      · Dernière mise à jour : {{ snapshot.lastUpdated }}
+    </p>
+  </div>
+  <a class="btn-primary" routerLink="/questionnaire">
+    <i class="pi pi-refresh"></i>
+    Relancer le diagnostic
+  </a>
+</div>
+
+<div class="stat-grid">
+  <div class="card stat-card">
+    <div class="score-ring" [style.--pct]="snapshot.overallScore">
+      <span>{{ snapshot.overallScore }}%</span>
+    </div>
+    <div>
+      <div class="stat-label">Score global</div>
+      <div class="stat-delta positive"><i class="pi pi-arrow-up"></i>+{{ snapshot.scoreDelta }}%</div>
+    </div>
+  </div>
+
+  <div class="card stat-card">
+    <i class="pi pi-check-square stat-icon"></i>
+    <div>
+      <div class="stat-value">{{ snapshot.answeredQuestions }} / {{ snapshot.totalQuestions }}</div>
+      <div class="stat-label">Questions répondues</div>
+      <div class="stat-delta positive"><i class="pi pi-check"></i>70 %</div>
+    </div>
+  </div>
+
+  <div class="card stat-card">
+    <i class="pi pi-sitemap stat-icon"></i>
+    <div>
+      <div class="stat-value">{{ snapshot.nistDomains }}</div>
+      <div class="stat-label">Domaines NIST</div>
+      <div class="stat-delta positive"><i class="pi pi-check"></i>100 %</div>
+    </div>
+  </div>
+
+  <div class="card stat-card">
+    <i class="pi pi-shield stat-icon"></i>
+    <div>
+      <div class="stat-value">{{ snapshot.cisControlsCovered }}</div>
+      <div class="stat-label">Contrôles CIS</div>
+      <div class="stat-delta positive"><i class="pi pi-check"></i>100 %</div>
+    </div>
+  </div>
+</div>
+
+<div class="main-grid">
+  <div class="card">
+    <div class="card-title">Score par fonction NIST CSF 2.0</div>
+    <app-radar-chart [data]="radarData()" [secondaryScore]="snapshot.sectorAverage" />
+    <div class="legend">
+      <span class="legend-item"><i class="dot dot--primary"></i>Votre score</span>
+      <span class="legend-item"><i class="dot dot--secondary"></i>Moyenne secteur (PME)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Score par contrôle CIS v8</div>
+    <div class="cis-list">
+      @for (control of snapshot.cisControlScores; track control.number) {
+        <div class="cis-row">
+          <span class="cis-label">{{ control.number }}. {{ control.label }}</span>
+          <div class="cis-bar-track">
+            <div class="cis-bar-fill" [style.width.%]="control.score"></div>
+          </div>
+          <span class="cis-score mono">{{ control.score }}%</span>
+        </div>
+      }
+    </div>
+    <a class="see-all" routerLink="/rapports">Voir les 18 contrôles <i class="pi pi-arrow-right"></i></a>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Actions rapides</div>
+    <nav class="quick-actions">
+      <a routerLink="/questionnaire">Continuer le questionnaire <i class="pi pi-arrow-right"></i></a>
+      <a routerLink="/rapports">Voir le rapport <i class="pi pi-arrow-right"></i></a>
+      <a routerLink="/utilisateurs">Gérer les utilisateurs <i class="pi pi-arrow-right"></i></a>
+      <a href="#">Paramètres de l'organisation <i class="pi pi-arrow-right"></i></a>
+    </nav>
+
+    <div class="next-step">
+      <div class="next-step-title"><i class="pi pi-flag"></i> Prochaine étape</div>
+      <p>Complétez les questions restantes pour obtenir un rapport complet.</p>
+    </div>
+  </div>
+</div>

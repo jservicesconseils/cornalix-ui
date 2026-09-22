@@ -1,0 +1,85 @@
+<div class="page-header">
+  <div>
+    <h1>Questionnaire</h1>
+    <p class="page-subtitle">Répondez aux questions pour évaluer la maturité de votre organisation.</p>
+  </div>
+</div>
+
+<div class="progress-row">
+  <div class="progress-track">
+    <div class="progress-fill" [style.width.%]="progressPct()"></div>
+  </div>
+  <span class="progress-label mono">{{ totalAnswered() }} / {{ totalQuestions() }} répondues</span>
+</div>
+
+<div class="questionnaire-grid">
+  <nav class="category-list">
+    @for (category of categoriesWithCounts(); track category.key) {
+      <button
+        type="button"
+        class="category-item"
+        [class.active]="category.key === selectedCategoryKey()"
+        (click)="selectCategory(category.key)"
+      >
+        <span class="category-label">{{ category.label }}</span>
+        <span class="category-count mono">{{ category.answered }} / {{ category.total }}</span>
+      </button>
+    }
+  </nav>
+
+  @if (currentQuestion(); as question) {
+    <div class="card question-card">
+      <div class="question-meta">
+        <span class="category-title">{{ currentCategoryLabel() }}</span>
+        <span class="question-index mono">Question {{ selectedIndex() + 1 }} sur {{ currentCategoryQuestions().length }}</span>
+      </div>
+
+      <p class="question-text">{{ question.text }}</p>
+      <p class="question-reference mono">Référence : {{ question.cisReference }}</p>
+
+      <div class="answer-options">
+        <button
+          type="button"
+          class="answer-pill answer-pill--yes"
+          [class.selected]="question.answer === 'YES'"
+          (click)="setAnswer('YES')"
+        >
+          <i class="pi pi-check-circle"></i> Oui
+        </button>
+        <button
+          type="button"
+          class="answer-pill answer-pill--no"
+          [class.selected]="question.answer === 'NO'"
+          (click)="setAnswer('NO')"
+        >
+          <i class="pi pi-times-circle"></i> Non
+        </button>
+        <button
+          type="button"
+          class="answer-pill answer-pill--partial"
+          [class.selected]="question.answer === 'PARTIAL'"
+          (click)="setAnswer('PARTIAL')"
+        >
+          <i class="pi pi-minus-circle"></i> Partiel
+        </button>
+        <button
+          type="button"
+          class="answer-pill answer-pill--na"
+          [class.selected]="question.answer === 'NOT_APPLICABLE'"
+          (click)="setAnswer('NOT_APPLICABLE')"
+        >
+          Non applicable
+        </button>
+      </div>
+
+      <div class="question-actions">
+        <button type="button" class="btn-secondary" [disabled]="isFirstQuestion()" (click)="previous()">
+          <i class="pi pi-arrow-left"></i> Précédente
+        </button>
+        <button type="button" class="btn-primary" [disabled]="isLastQuestion()" (click)="next()">
+          Suivante <i class="pi pi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  }
+</div>

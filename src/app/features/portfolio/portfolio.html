@@ -1,0 +1,38 @@
+<div class="page-header">
+  <div>
+    <h1>Mes organisations</h1>
+    <p class="page-subtitle">{{ portfolio().length }} organisations sous votre portefeuille</p>
+  </div>
+  <button type="button" class="btn-primary">
+    <i class="pi pi-plus"></i>
+    Ajouter
+  </button>
+</div>
+
+<div class="search-row">
+  <span class="search-input">
+    <i class="pi pi-search"></i>
+    <input
+      pInputText
+      type="text"
+      placeholder="Rechercher une organisation..."
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)"
+    />
+  </span>
+</div>
+
+<div class="org-grid">
+  @for (org of filteredPortfolio(); track org.id) {
+    <button type="button" class="org-card" [class.active]="org.id === currentOrganizationId()" (click)="open(org.id)">
+      <span class="org-avatar">{{ initials(org.name) }}</span>
+      <span class="org-info">
+        <span class="org-name">{{ org.name }}</span>
+        <span class="org-location mono">{{ org.location }}</span>
+      </span>
+      <span class="org-score" [class]="'org-score--' + scoreLevel(org.score)">{{ org.score }}%</span>
+    </button>
+  } @empty {
+    <p class="empty-state">Aucune organisation ne correspond à votre recherche.</p>
+  }
+</div>

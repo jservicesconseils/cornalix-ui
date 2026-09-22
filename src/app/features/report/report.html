@@ -1,0 +1,132 @@
+<div class="page-header">
+  <div>
+    <h1>Rapport de cybersécurité</h1>
+    <p class="page-subtitle">
+      Synthèse du diagnostic et détail des résultats
+      @if (currentOrganization(); as org) {
+        · <span class="mono">{{ org.name }}</span>
+      }
+    </p>
+  </div>
+  <div class="header-actions">
+    <button type="button" class="btn-secondary"><i class="pi pi-download"></i> Exporter (PDF)</button>
+    <button type="button" class="btn-primary"><i class="pi pi-share-alt"></i> Partager</button>
+  </div>
+</div>
+
+<p-tabs value="overview">
+  <p-tablist>
+    <p-tab value="overview">Vue d'ensemble</p-tab>
+    <p-tab value="nist">Par fonction NIST</p-tab>
+    <p-tab value="cis">Par contrôle CIS</p-tab>
+    <p-tab value="answers">Réponses détaillées</p-tab>
+  </p-tablist>
+
+  <p-tabpanels>
+    <p-tabpanel value="overview">
+      <div class="overview-grid">
+        <div class="card score-card">
+          <div class="card-title">Score global</div>
+          <div class="score-big">{{ snapshot.overallScore }}%</div>
+        </div>
+
+        <div class="card summary-card">
+          <div class="card-title">Résumé</div>
+          <p>
+            Votre organisation démontre une bonne maturité en cybersécurité. Certaines améliorations sont
+            toutefois recommandées, notamment en matière de détection et de continuité des opérations.
+          </p>
+          <p class="summary-highlight">
+            <i class="pi pi-check-circle"></i>
+            Vous êtes au-dessus de la moyenne des PME de votre secteur ({{ snapshot.sectorAverage }} %).
+          </p>
+        </div>
+      </div>
+
+      <div class="overview-grid two-cols">
+        <div class="card">
+          <div class="card-title">Score par fonction NIST CSF 2.0</div>
+          <div class="bar-list">
+            @for (fn of snapshot.nistFunctionScores; track fn.key) {
+              <div class="bar-row">
+                <span class="bar-label">{{ fn.label }}</span>
+                <div class="bar-track">
+                  <div class="bar-fill" [style.width.%]="fn.score"></div>
+                </div>
+                <span class="bar-score mono">{{ fn.score }}%</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Score par contrôle CIS v8 (extrait)</div>
+          <div class="bar-list">
+            @for (control of snapshot.cisControlScores; track control.number) {
+              <div class="bar-row">
+                <span class="bar-label">{{ control.number }}. {{ control.label }}</span>
+                <div class="bar-track">
+                  <div class="bar-fill" [style.width.%]="control.score"></div>
+                </div>
+                <span class="bar-score mono">{{ control.score }}%</span>
+              </div>
+            }
+          </div>
+          <a class="see-all" href="#">Voir les 18 contrôles <i class="pi pi-arrow-right"></i></a>
+        </div>
+      </div>
+    </p-tabpanel>
+
+    <p-tabpanel value="nist">
+      <div class="card">
+        <div class="card-title">Détail par fonction NIST CSF 2.0</div>
+        <div class="bar-list bar-list--large">
+          @for (fn of snapshot.nistFunctionScores; track fn.key) {
+            <div class="bar-row">
+              <span class="bar-label">{{ fn.label }}</span>
+              <div class="bar-track">
+                <div class="bar-fill" [style.width.%]="fn.score"></div>
+              </div>
+              <span class="bar-score mono">{{ fn.score }}%</span>
+            </div>
+          }
+        </div>
+        <p class="footnote">Meilleure fonction : {{ bestFunction().label }} ({{ bestFunction().score }}%) · À prioriser : {{ worstFunction().label }} ({{ worstFunction().score }}%)</p>
+      </div>
+    </p-tabpanel>
+
+    <p-tabpanel value="cis">
+      <div class="card">
+        <div class="card-title">Détail par contrôle CIS v8</div>
+        <div class="bar-list bar-list--large">
+          @for (control of snapshot.cisControlScores; track control.number) {
+            <div class="bar-row">
+              <span class="bar-label">{{ control.number }}. {{ control.label }}</span>
+              <div class="bar-track">
+                <div class="bar-fill" [style.width.%]="control.score"></div>
+              </div>
+              <span class="bar-score mono">{{ control.score }}%</span>
+            </div>
+          }
+        </div>
+      </div>
+    </p-tabpanel>
+
+    <p-tabpanel value="answers">
+      <div class="card">
+        <div class="card-title">Réponses détaillées ({{ answeredQuestions().length }})</div>
+        <div>
+          @for (q of answeredQuestions(); track q.id) {
+            <div class="r-row">
+              <div>
+                <div class="mono r-ref">{{ q.cisReference }}</div>
+                <div class="r-text">{{ q.text }}</div>
+              </div>
+              <span class="badge" [class]="answerBadgeClass(q.answer!)">{{ q.answerLabel }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>
