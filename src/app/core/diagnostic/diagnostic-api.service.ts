@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { API_BASE_URLS } from '../data/api-config';
 import { NistFunctionKey } from '../models/organization.model';
-import { AnswerValue, Question } from '../models/question.model';
+import { AnswerValue, Question, formatCisReference, pickQuestionText } from '../models/question.model';
 
 interface QuestionResponseDto {
   id: string;
@@ -26,12 +26,11 @@ interface AnswerResponseDto {
 // (cisReference) alors que le backend separe cisControl/cisSafeguard --
 // compose ici plutot que d'eclater le modele pour un seul consommateur.
 function toQuestion(dto: QuestionResponseDto, answer: AnswerValue | null): Question {
-  const text = dto.translations['fr'] ?? Object.values(dto.translations)[0] ?? '';
   return {
     id: dto.id,
     categoryKey: dto.nistFunction,
-    cisReference: `CIS ${dto.cisControl} — ${dto.cisSafeguard}`,
-    text,
+    cisReference: formatCisReference(dto.cisControl, dto.cisSafeguard),
+    text: pickQuestionText(dto.translations),
     answer,
   };
 }

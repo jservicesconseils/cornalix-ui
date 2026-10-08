@@ -4,7 +4,6 @@
     <p class="page-subtitle">Vue d'ensemble de votre posture de cybersécurité</p>
   </div>
   <div class="page-header-meta">
-    <span class="last-updated mono">Dernière mise à jour : {{ snapshot.lastUpdated }}</span>
     <a class="btn-primary" routerLink="/questionnaire">
       <svg lucideRefreshCw [size]="16"></svg>
       Relancer le diagnostic
@@ -14,11 +13,10 @@
 
 <div class="stat-grid">
   <div class="card stat-card">
-    <div class="score-ring" [style.--pct]="snapshot.overallScore"></div>
+    <div class="score-ring" [style.--pct]="overallScorePct()"></div>
     <div>
-      <div class="stat-value mono">{{ snapshot.overallScore }}%</div>
+      <div class="stat-value mono">{{ overallScoreLabel() }}</div>
       <div class="stat-label">Score global</div>
-      <div class="stat-delta positive"><svg lucideTrendingUp [size]="12"></svg>+{{ snapshot.scoreDelta }}%</div>
     </div>
   </div>
 
@@ -39,7 +37,7 @@
       </svg>
     </span>
     <div>
-      <div class="stat-value mono">{{ snapshot.answeredQuestions }} / {{ snapshot.totalQuestions }}</div>
+      <div class="stat-value mono">{{ answeredCount() }} / {{ totalCount() }}</div>
       <div class="stat-label">Questions répondues</div>
       <div class="stat-delta positive"><svg lucideCheck [size]="12"></svg>70 %</div>
     </div>
@@ -74,7 +72,7 @@
       </svg>
     </span>
     <div>
-      <div class="stat-value mono">{{ snapshot.nistDomains }}</div>
+      <div class="stat-value mono">{{ nistDomainsTotal }}</div>
       <div class="stat-label">Domaines NIST</div>
       <div class="stat-delta positive"><svg lucideCheck [size]="12"></svg>100 %</div>
     </div>
@@ -94,7 +92,7 @@
       </svg>
     </span>
     <div>
-      <div class="stat-value mono">{{ snapshot.cisControlsCovered }}</div>
+      <div class="stat-value mono">{{ cisControlsCoveredCount() }}</div>
       <div class="stat-label">Contrôles CIS</div>
       <div class="stat-delta positive"><svg lucideCheck [size]="12"></svg>100 %</div>
     </div>
@@ -104,17 +102,16 @@
 <div class="main-grid">
   <div class="card">
     <div class="card-title">Score par fonction NIST CSF 2.0</div>
-    <app-radar-chart [data]="radarData()" [secondaryScore]="snapshot.sectorAverage" />
+    <app-radar-chart [data]="nistFunctionScores()" />
     <div class="legend">
       <span class="legend-item"><i class="dot dot--primary"></i>Votre score</span>
-      <span class="legend-item"><i class="dot dot--secondary"></i>Moyenne secteur (PME)</span>
     </div>
   </div>
 
   <div class="card">
     <div class="card-title">Score par contrôle CIS v8</div>
     <div class="cis-list">
-      @for (control of snapshot.cisControlScores; track control.number) {
+      @for (control of cisControlScores(); track control.number) {
         <div class="cis-row">
           <span class="cis-label">{{ control.number }}. {{ control.label }}</span>
           <div class="cis-bar-track">
