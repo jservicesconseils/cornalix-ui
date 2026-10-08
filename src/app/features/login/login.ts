@@ -6,9 +6,7 @@ import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
 import { Checkbox } from 'primeng/checkbox';
 
-import { AuthService } from '../../core/auth/auth.service';
-import { DEMO_USERS } from '../../core/data/demo-data';
-import { AppUser } from '../../core/models/user.model';
+import { AuthService, LoginFailedError } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -21,30 +19,32 @@ export class Login {
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
 
-  protected readonly email = signal('jean.dupont@acme.ca');
+  protected readonly email = signal('test@cornalix.ca');
   protected readonly password = signal('');
   protected readonly rememberMe = signal(true);
   protected readonly lang = signal(this.translate.currentLang || 'fr');
+  protected readonly submitting = signal(false);
+  protected readonly errorMessage = signal<string | null>(null);
 
   protected switchLang(lang: 'fr' | 'en'): void {
     this.lang.set(lang);
     this.translate.use(lang);
   }
 
-  protected submit(): void {
-    const user = this.resolveDemoUser(this.email());
-    this.authService.login(user);
-    this.router.navigate(['/tableau-de-bord']);
-  }
+  protected async submit(): Promise<void> {
+    if (this.submitting()) return;
 
-  private resolveDemoUser(email: string): AppUser {
-    const normalized = email.trim().toLowerCase();
-    if (normalized.includes('sophie') || normalized.includes('.ti')) {
-      return DEMO_USERS['ti'];
+    this.errorMessage.set(null);
+    this.submitting.set(true);
+    try {
+      await this.authService.login(this.email().trim(), this.password());
+      this.router.navigate(['/tableau-de-bord']);
+    } catch (error) {
+      this.errorMessage.set(
+        error instanceof LoginFailedError ? error.message : 'La connexion a échoué. Réessayez.',
+      );
+    } finally {
+      this.submitting.set(false);
     }
-    if (normalized.includes('consultant')) {
-      return DEMO_USERS['consultant'];
-    }
-    return DEMO_USERS['admin'];
   }
 }
