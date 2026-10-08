@@ -295,6 +295,11 @@
   &:hover {
     background: var(--accent-strong);
   }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
 }
 
 .divider {
@@ -331,6 +336,16 @@
   &:hover {
     background: var(--surface-alt);
   }
+}
+
+.login-error {
+  margin: -8px 0 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--no-soft);
+  color: var(--no);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .demo-hint {

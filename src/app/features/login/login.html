@@ -123,8 +123,12 @@
         <a href="#" class="forgot-link">{{ 'login.forgotPassword' | translate }}</a>
       </div>
 
-      <button type="submit" class="btn-primary">
-        {{ 'login.submit' | translate }}
+      @if (errorMessage(); as error) {
+        <p class="login-error" role="alert">{{ error }}</p>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="submitting()">
+        {{ submitting() ? 'Connexion…' : ('login.submit' | translate) }}
         <i class="pi pi-arrow-right"></i>
       </button>
 
@@ -140,9 +144,7 @@
         {{ 'login.google' | translate }}
       </button>
 
-      <p class="demo-hint">
-        Démo : jean.dupont&#64;acme.ca (Admin) · sophie.ti&#64;acme.ca (TI) · consultant&#64;cornalix.ca (Consultant)
-      </p>
+      <p class="demo-hint">Compte de test Cognito : test&#64;cornalix.ca</p>
 
       <p class="no-account">
         {{ 'login.noAccount' | translate }}
