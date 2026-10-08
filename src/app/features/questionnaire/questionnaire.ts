@@ -1,7 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
-import { DEMO_QUESTIONS, DEMO_QUESTION_CATEGORIES } from '../../core/data/demo-data';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Store } from '@ngrx/store';
+
+import { QUESTION_CATEGORIES } from '../../core/data/question-categories';
+import { DiagnosticApiService } from '../../core/diagnostic/diagnostic-api.service';
 import { AnswerValue, Question } from '../../core/models/question.model';
 import { NistFunctionKey } from '../../core/models/organization.model';
+import { tenantFeature } from '../../core/state/tenant/tenant.reducer';
 
 @Component({
   selector: 'app-questionnaire',
@@ -10,11 +14,40 @@ import { NistFunctionKey } from '../../core/models/organization.model';
   styleUrl: './questionnaire.scss',
 })
 export class Questionnaire {
-  protected readonly categories = DEMO_QUESTION_CATEGORIES;
-  protected readonly questions = signal<Question[]>(DEMO_QUESTIONS);
+  private readonly store = inject(Store);
+  private readonly diagnosticApi = inject(DiagnosticApiService);
 
-  protected readonly selectedCategoryKey = signal<NistFunctionKey>('IDENTIFY');
-  protected readonly selectedIndex = signal(2);
+  private readonly currentOrganizationId = this.store.selectSignal(tenantFeature.selectCurrentOrganizationId);
+
+  protected readonly categories = QUESTION_CATEGORIES;
+  protected readonly questions = signal<Question[]>([]);
+  protected readonly loading = signal(true);
+
+  protected readonly selectedCategoryKey = signal<NistFunctionKey>(QUESTION_CATEGORIES[0].key);
+  protected readonly selectedIndex = signal(0);
+
+  constructor() {
+    // Reagit a la fois au chargement initial du portefeuille et a un
+    // changement d'organisation (ex. Consultant qui bascule de client
+    // dans le bandeau superieur) -- recharge le catalogue + les reponses
+    // de l'organisation nouvellement selectionnee a chaque fois.
+    effect(() => {
+      const organizationId = this.currentOrganizationId();
+      if (!organizationId) {
+        return;
+      }
+
+      this.loading.set(true);
+      this.diagnosticApi
+        .listQuestionsWithAnswers(organizationId)
+        .then((questions) => {
+          this.questions.set(questions);
+          this.selectedCategoryKey.set(QUESTION_CATEGORIES[0].key);
+          this.selectedIndex.set(0);
+        })
+        .finally(() => this.loading.set(false));
+    });
+  }
 
   protected readonly categoriesWithCounts = computed(() =>
     this.categories.map((category) => {
@@ -52,8 +85,15 @@ export class Questionnaire {
 
   protected setAnswer(value: AnswerValue): void {
     const current = this.currentQuestion();
-    if (!current) return;
+    const organizationId = this.currentOrganizationId();
+    if (!current || !organizationId) return;
+
     this.questions.update((all) => all.map((q) => (q.id === current.id ? { ...q, answer: value } : q)));
+
+    // Persistance best-effort : l'etat local est deja mis a jour de
+    // maniere optimiste, on ne bloque pas la navigation sur le reseau.
+    // Pas d'indicateur d'echec visible pour l'instant (hors scope).
+    void this.diagnosticApi.saveAnswer(organizationId, current.id, value);
   }
 
   protected previous(): void {
