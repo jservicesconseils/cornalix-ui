@@ -57,6 +57,15 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "dev-deploy": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/core/data/api-config.ts",
+                  "with": "src/app/core/data/api-config.dev-deploy.ts"
+                }
+              ],
+              "outputHashing": "all"
             }
           },
           "defaultConfiguration": "production"
