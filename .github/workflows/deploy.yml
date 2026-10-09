@@ -1,4 +1,4 @@
-# CI/CD (SCRUM-33) : a chaque push sur develop (branche d'integration,
+# CI/CD (SCRUM-33) : a chaque push sur master (branche de prod,
 # voir convention de branches du projet), build Angular en mode
 # production (fileReplacements bascule API_BASE_URLS vers les noms
 # d'hote ALB -- voir api-config.prod.ts) et deploie vers S3 + CloudFront.
@@ -13,7 +13,7 @@ name: Deploy
 
 on:
   push:
-    branches: [develop]
+    branches: [master]
 
 permissions:
   id-token: write
@@ -25,6 +25,9 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Variables (AWS_ROLE_ARN, S3_BUCKET, CLOUDFRONT_DISTRIBUTION_ID)
+    # vivent dans l'environnement GitHub "prod", pas au niveau du repo.
+    environment: prod
     steps:
       - uses: actions/checkout@v4
 
