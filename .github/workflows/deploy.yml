@@ -1,0 +1,53 @@
+# CI/CD (SCRUM-33) : a chaque push sur develop (branche d'integration,
+# voir convention de branches du projet), build Angular en mode
+# production (fileReplacements bascule API_BASE_URLS vers les noms
+# d'hote ALB -- voir api-config.prod.ts) et deploie vers S3 + CloudFront.
+#
+# Authentification AWS par federation OIDC (role-to-assume) -- aucune
+# cle d'acces long-terme stockee en secret GitHub. Le role
+# cornalix-prod-github-actions-ui (infra/prod/platform/github-oidc.tf,
+# cornalix-ms-identity) n'autorise que l'ecriture dans le bucket S3 du
+# frontend et l'invalidation de SA distribution CloudFront -- rien
+# d'autre (pas d'acces aux microservices backend).
+name: Deploy
+
+on:
+  push:
+    branches: [develop]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ca-central-1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx ng build --configuration production
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync to S3
+        run: aws s3 sync dist/cornalix-ui/browser/ "s3://${{ vars.S3_BUCKET }}/" --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --paths "/*"
