@@ -14,22 +14,10 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-# Zone Route53 + certificat ACM (us-east-1) crees cote
-# infra/prod/platform (cornalix-ms-identity, SCRUM-38) -- lus ici en
-# lecture seule, jamais recrees.
-data "terraform_remote_state" "platform" {
-  backend = "s3"
-
-  config = {
-    bucket = "cornalix-tfstate-591859078355"
-    key    = "prod/platform/terraform.tfstate"
-    region = "ca-central-1"
-  }
-}
-
 ############################################
 # Bucket S3 -- jamais public directement, seul CloudFront (via Origin
-# Access Control) peut y lire des objets (SCRUM-37).
+# Access Control) peut y lire des objets. Meme patron que
+# infra/prod/frontend, bucket distinct (build dev separe du build prod).
 ############################################
 resource "aws_s3_bucket" "frontend" {
   bucket = "${var.project}-${var.environment}-frontend-${data.aws_caller_identity.current.account_id}"
@@ -58,11 +46,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "frontend" {
 }
 
 ############################################
-# CloudFront -- sert le bucket S3 en HTTPS, avec repli vers index.html
-# pour les routes cote client Angular (404/403 S3 -> 200 index.html).
-# Domaine cornalix.ca + certificat ACM branches (SCRUM-38) -- le
-# domaine *.cloudfront.net genere par AWS reste utilisable en parallele
-# (CloudFront accepte les deux une fois des alias configures).
+# CloudFront -- pas de domaine personnalise pour dev (pas de certificat
+# ACM dedie non plus) : le domaine *.cloudfront.net genere par AWS
+# suffit pour un environnement de validation interne.
 ############################################
 resource "aws_cloudfront_origin_access_control" "frontend" {
   name                              = "${var.project}-${var.environment}-frontend"
@@ -74,10 +60,7 @@ resource "aws_cloudfront_origin_access_control" "frontend" {
 resource "aws_cloudfront_distribution" "frontend" {
   enabled             = true
   default_root_object = "index.html"
-  aliases             = [var.domain_name, "www.${var.domain_name}"]
-  # Palier le moins cher (Amerique du Nord + Europe uniquement) --
-  # suffisant pour l'audience visee (PME quebecoises, Loi 25).
-  price_class = "PriceClass_100"
+  price_class         = "PriceClass_100"
 
   origin {
     domain_name              = aws_s3_bucket.frontend.bucket_regional_domain_name
@@ -100,10 +83,6 @@ resource "aws_cloudfront_distribution" "frontend" {
     }
   }
 
-  # Angular gere le routage cote client : une URL profonde (ex.
-  # /tableau-de-bord) n'existe pas comme objet S3 -- CloudFront doit
-  # renvoyer index.html quand meme (avec un 200, pas un 404, pour que
-  # le navigateur execute l'appli au lieu d'afficher une erreur).
   custom_error_response {
     error_code         = 403
     response_code       = 200
@@ -123,9 +102,7 @@ resource "aws_cloudfront_distribution" "frontend" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = data.terraform_remote_state.platform.outputs.acm_frontend_certificate_arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    cloudfront_default_certificate = true
   }
 
   tags = {

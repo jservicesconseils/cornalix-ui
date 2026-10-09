@@ -13,3 +13,9 @@ variable "aws_region" {
   type        = string
   default     = "ca-central-1"
 }
+
+variable "domain_name" {
+  description = "Domaine du déploiement (SCRUM-38) -- même valeur que infra/prod/platform/variables.tf (cornalix-ms-identity)."
+  type        = string
+  default     = "cornalix.ca"
+}
