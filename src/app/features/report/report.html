@@ -14,6 +14,7 @@
   </div>
 </div>
 
+<app-async-state [loading]="loading()" [error]="errorMessage()">
 <p-tabs value="overview">
   <p-tablist>
     <p-tab value="overview">Vue d'ensemble</p-tab>
@@ -126,3 +127,4 @@
     </p-tabpanel>
   </p-tabpanels>
 </p-tabs>
+</app-async-state>

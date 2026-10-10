@@ -11,6 +11,7 @@
   </div>
 </div>
 
+<app-async-state [loading]="loading()" [error]="errorMessage()">
 <div class="stat-grid">
   <div class="card stat-card">
     <div class="score-ring" [style.--pct]="overallScorePct()"></div>
@@ -184,3 +185,4 @@
     </div>
   </div>
 </div>
+</app-async-state>
