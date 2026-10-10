@@ -55,4 +55,11 @@ export class UserApiService {
       this.http.delete<void>(`${API_BASE_URLS.identity}/api/v1/organizations/${organizationId}/users/${userId}`),
     );
   }
+
+  // Auto-inscription d'un Consultant cybersecurite (SCRUM-41) -- chemin
+  // distinct de OrganizationApiService.register : aucune organisation
+  // creee, seul le role est assigne cote Cognito.
+  async registerAsConsultant(): Promise<void> {
+    await firstValueFrom(this.http.post<void>(`${API_BASE_URLS.identity}/api/v1/consultants/register`, {}));
+  }
 }

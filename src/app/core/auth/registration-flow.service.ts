@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 
-export interface PendingRegistration {
-  email: string;
-  password: string;
-  organizationName: string;
-}
+// Un Administrateur PME cree son organisation a l'inscription ; un
+// Consultant cybersecurite n'en a aucune a lui (il gere un portefeuille
+// d'organisations clientes) -- types distincts plutot qu'un
+// organizationName optionnel, pour qu'un oubli de branchement cote
+// ConfirmSignup soit une erreur de compilation plutot qu'un bug muet.
+export type PendingRegistration =
+  | { accountType: 'PME'; email: string; password: string; organizationName: string }
+  | { accountType: 'CONSULTANT'; email: string; password: string };
 
 // Porte les donnees d'inscription (SCRUM-41) entre l'ecran Inscription
 // et l'ecran Confirmation -- en memoire seulement (jamais dans

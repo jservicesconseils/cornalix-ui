@@ -32,6 +32,9 @@
   "signup": {
     "title": "Create your account",
     "instructions": "Start your cybersecurity maturity assessment.",
+    "accountTypePme": "I'm an SME",
+    "accountTypeConsultant": "I'm a consultant",
+    "consultantInfo": "Your account will be created without an organization -- you manage a portfolio of clients rather than a single SME.",
     "organizationName": "Organization name",
     "fullName": "Full name",
     "password": "Password",

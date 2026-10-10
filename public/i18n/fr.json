@@ -32,6 +32,9 @@
   "signup": {
     "title": "Créer votre compte",
     "instructions": "Démarrez votre évaluation de maturité en cybersécurité.",
+    "accountTypePme": "Je suis une PME",
+    "accountTypeConsultant": "Je suis consultant",
+    "consultantInfo": "Votre compte sera créé sans organisation -- vous gérez un portefeuille de clients plutôt qu'une seule PME.",
     "organizationName": "Nom de l'organisation",
     "fullName": "Nom complet",
     "password": "Mot de passe",

@@ -6,9 +6,11 @@ import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
 
 import { AuthService, SignUpFailedError } from '../../core/auth/auth.service';
-import { RegistrationFlowService } from '../../core/auth/registration-flow.service';
+import { PendingRegistration, RegistrationFlowService } from '../../core/auth/registration-flow.service';
 import { PasswordRequirements } from '../../shared/password-requirements/password-requirements';
 import { isPasswordValid } from '../../shared/password-requirements/password-rules';
+
+type AccountType = PendingRegistration['accountType'];
 
 @Component({
   selector: 'app-signup',
@@ -21,6 +23,12 @@ export class Signup {
   private readonly registrationFlow = inject(RegistrationFlowService);
   private readonly router = inject(Router);
 
+  // Un Administrateur PME gere une seule organisation (la sienne,
+  // creee ici) ; un Consultant cybersecurite gere un portefeuille de
+  // plusieurs organisations clientes et n'en possede aucune a lui --
+  // pas de champ organisation a remplir dans ce cas (voir
+  // RegistrationFlowService).
+  protected readonly accountType = signal<AccountType>('PME');
   protected readonly organizationName = signal('');
   protected readonly fullName = signal('');
   protected readonly email = signal('');
@@ -48,11 +56,13 @@ export class Signup {
     try {
       const email = this.email().trim();
       await this.authService.signUp(email, this.password(), this.fullName().trim());
-      this.registrationFlow.start({
-        email,
-        password: this.password(),
-        organizationName: this.organizationName().trim(),
-      });
+
+      this.registrationFlow.start(
+        this.accountType() === 'PME'
+          ? { accountType: 'PME', email, password: this.password(), organizationName: this.organizationName().trim() }
+          : { accountType: 'CONSULTANT', email, password: this.password() },
+      );
+
       this.router.navigate(['/confirmer-inscription']);
     } catch (error) {
       this.errorMessage.set(error instanceof SignUpFailedError ? error.message : "La création du compte a échoué.");

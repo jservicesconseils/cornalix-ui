@@ -37,13 +37,24 @@ export class ConfirmSignup {
     this.submitting.set(true);
     try {
       await this.authService.confirmSignUp(this.pending.email, this.code());
-      await this.authService.completeRegistration(
-        this.pending.email,
-        this.pending.password,
-        this.pending.organizationName,
-      );
-      this.registrationFlow.clear();
-      this.router.navigate(['/tableau-de-bord']);
+
+      if (this.pending.accountType === 'PME') {
+        await this.authService.completeRegistration(
+          this.pending.email,
+          this.pending.password,
+          this.pending.organizationName,
+        );
+        this.registrationFlow.clear();
+        this.router.navigate(['/tableau-de-bord']);
+      } else {
+        await this.authService.completeConsultantRegistration(this.pending.email, this.pending.password);
+        this.registrationFlow.clear();
+        // Portefeuille vide a ce stade (aucune organisation cliente ne
+        // peut encore y ajouter ce consultant) -- l'ecran Portefeuille
+        // gere deja ce cas plutot que le Tableau de bord, qui a besoin
+        // d'une organisation courante pour afficher quoi que ce soit.
+        this.router.navigate(['/portefeuille']);
+      }
     } catch (error) {
       this.errorMessage.set(
         error instanceof ConfirmSignUpFailedError ? error.message : 'La confirmation a échoué.',

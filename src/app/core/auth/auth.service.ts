@@ -27,6 +27,7 @@ import { COGNITO_CONFIG } from './cognito-config';
 import { TokenStorageService } from './token-storage.service';
 import { decodeJwtPayload, CognitoIdTokenClaims } from './jwt.util';
 import { OrganizationApiService } from '../organization/organization-api.service';
+import { UserApiService } from '../user/user-api.service';
 
 export class LoginFailedError extends Error {}
 export class SignUpFailedError extends Error {}
@@ -42,6 +43,7 @@ export class AuthService {
   private readonly store = inject(Store);
   private readonly tokenStorage = inject(TokenStorageService);
   private readonly organizationApi = inject(OrganizationApiService);
+  private readonly userApi = inject(UserApiService);
   private readonly cognito = new CognitoIdentityProviderClient({ region: COGNITO_CONFIG.region });
 
   readonly isAuthenticated = this.store.selectSignal(authFeature.selectIsAuthenticated);
@@ -185,6 +187,18 @@ export class AuthService {
   async completeRegistration(email: string, password: string, organizationName: string): Promise<void> {
     await this.login(email, password);
     await this.organizationApi.register(organizationName);
+    await this.refresh();
+    await this.loadPortfolio();
+  }
+
+  // Meme principe, pour un Consultant cybersecurite -- aucune
+  // organisation creee, seul le role est assigne. Son portefeuille
+  // reste vide apres coup (aucune organisation cliente ne peut encore
+  // l'y ajouter, fonctionnalite separee) : loadPortfolio() le confirme
+  // simplement plutot que de le supposer.
+  async completeConsultantRegistration(email: string, password: string): Promise<void> {
+    await this.login(email, password);
+    await this.userApi.registerAsConsultant();
     await this.refresh();
     await this.loadPortfolio();
   }

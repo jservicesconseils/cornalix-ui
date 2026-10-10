@@ -4,18 +4,43 @@
       <h2>{{ 'signup.title' | translate }}</h2>
       <p class="auth-instructions">{{ 'signup.instructions' | translate }}</p>
 
-      <div class="field">
-        <label for="organizationName">{{ 'signup.organizationName' | translate }}</label>
-        <input
-          pInputText
-          id="organizationName"
-          type="text"
-          name="organizationName"
-          [ngModel]="organizationName()"
-          (ngModelChange)="organizationName.set($event)"
-          required
-        />
+      <div class="account-type-toggle" role="radiogroup">
+        <button
+          type="button"
+          role="radio"
+          [attr.aria-checked]="accountType() === 'PME'"
+          [class.active]="accountType() === 'PME'"
+          (click)="accountType.set('PME')"
+        >
+          {{ 'signup.accountTypePme' | translate }}
+        </button>
+        <button
+          type="button"
+          role="radio"
+          [attr.aria-checked]="accountType() === 'CONSULTANT'"
+          [class.active]="accountType() === 'CONSULTANT'"
+          (click)="accountType.set('CONSULTANT')"
+        >
+          {{ 'signup.accountTypeConsultant' | translate }}
+        </button>
       </div>
+
+      @if (accountType() === 'PME') {
+        <div class="field">
+          <label for="organizationName">{{ 'signup.organizationName' | translate }}</label>
+          <input
+            pInputText
+            id="organizationName"
+            type="text"
+            name="organizationName"
+            [ngModel]="organizationName()"
+            (ngModelChange)="organizationName.set($event)"
+            required
+          />
+        </div>
+      } @else {
+        <p class="auth-info">{{ 'signup.consultantInfo' | translate }}</p>
+      }
 
       <div class="field">
         <label for="fullName">{{ 'signup.fullName' | translate }}</label>
