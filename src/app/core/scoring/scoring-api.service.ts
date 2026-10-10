@@ -32,10 +32,27 @@ export class ScoringApiService {
         `${API_BASE_URLS.scoring}/api/v1/scoring/organizations/${organizationId}/score`,
       ),
     );
-    return {
-      overallScore: toPercent(dto.overallScore),
-      scoreByFunction: mapFractionsToPercent(dto.scoreByFunction ?? {}),
-      scoreByCisControl: mapFractionsToPercent(dto.scoreByCisControl ?? {}),
-    };
+    return toSnapshot(dto);
   }
+
+  // Score de plusieurs organisations en un seul appel (SCRUM-43) --
+  // remplace le pattern N+1 du Portefeuille Consultant (un getScore()
+  // par organisation).
+  async getScores(organizationIds: string[]): Promise<Record<string, ScoreSnapshot>> {
+    const dtosByOrgId = await firstValueFrom(
+      this.http.post<Record<string, ScoreResponseDto>>(
+        `${API_BASE_URLS.scoring}/api/v1/scoring/organizations/batch-scores`,
+        { organizationIds },
+      ),
+    );
+    return Object.fromEntries(Object.entries(dtosByOrgId).map(([orgId, dto]) => [orgId, toSnapshot(dto)]));
+  }
+}
+
+function toSnapshot(dto: ScoreResponseDto): ScoreSnapshot {
+  return {
+    overallScore: toPercent(dto.overallScore),
+    scoreByFunction: mapFractionsToPercent(dto.scoreByFunction ?? {}),
+    scoreByCisControl: mapFractionsToPercent(dto.scoreByCisControl ?? {}),
+  };
 }

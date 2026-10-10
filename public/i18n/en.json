@@ -36,6 +36,8 @@
     "accountTypeConsultant": "I'm a consultant",
     "consultantInfo": "Your account will be created without an organization -- you manage a portfolio of clients rather than a single SME.",
     "organizationName": "Organization name",
+    "organizationLocation": "City / region (optional)",
+    "organizationLocationPlaceholder": "E.g. Montreal, QC",
     "fullName": "Full name",
     "password": "Password",
     "confirmPassword": "Confirm password",

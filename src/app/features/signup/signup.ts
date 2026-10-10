@@ -30,6 +30,7 @@ export class Signup {
   // RegistrationFlowService).
   protected readonly accountType = signal<AccountType>('PME');
   protected readonly organizationName = signal('');
+  protected readonly organizationLocation = signal('');
   protected readonly fullName = signal('');
   protected readonly email = signal('');
   protected readonly password = signal('');
@@ -59,7 +60,13 @@ export class Signup {
 
       this.registrationFlow.start(
         this.accountType() === 'PME'
-          ? { accountType: 'PME', email, password: this.password(), organizationName: this.organizationName().trim() }
+          ? {
+              accountType: 'PME',
+              email,
+              password: this.password(),
+              organizationName: this.organizationName().trim(),
+              organizationLocation: this.organizationLocation().trim(),
+            }
           : { accountType: 'CONSULTANT', email, password: this.password() },
       );
 

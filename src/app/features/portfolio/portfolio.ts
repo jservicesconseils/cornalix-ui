@@ -46,11 +46,13 @@ export class Portfolio {
         return;
       }
 
-      Promise.all(
-        organizations.map((org) =>
-          this.scoringApi.getScore(org.id).then((score) => [org.id, score.overallScore ?? 0] as const),
-        ),
-      ).then((entries) => this.scoreByOrgId.set(Object.fromEntries(entries)));
+      // Un seul appel pour tout le portefeuille plutot qu'un par
+      // organisation (SCRUM-43) -- cornalix-ms-scoring calcule les N
+      // scores server-side, en parallele.
+      this.scoringApi.getScores(organizations.map((org) => org.id)).then((scores) => {
+        const entries = Object.entries(scores).map(([orgId, score]) => [orgId, score.overallScore ?? 0] as const);
+        this.scoreByOrgId.set(Object.fromEntries(entries));
+      });
     });
   }
 

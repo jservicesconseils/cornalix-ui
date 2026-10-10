@@ -36,6 +36,8 @@
     "accountTypeConsultant": "Je suis consultant",
     "consultantInfo": "Votre compte sera créé sans organisation -- vous gérez un portefeuille de clients plutôt qu'une seule PME.",
     "organizationName": "Nom de l'organisation",
+    "organizationLocation": "Ville / région (optionnel)",
+    "organizationLocationPlaceholder": "Ex. Montréal, QC",
     "fullName": "Nom complet",
     "password": "Mot de passe",
     "confirmPassword": "Confirmer le mot de passe",

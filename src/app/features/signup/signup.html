@@ -38,6 +38,19 @@
             required
           />
         </div>
+
+        <div class="field">
+          <label for="organizationLocation">{{ 'signup.organizationLocation' | translate }}</label>
+          <input
+            pInputText
+            id="organizationLocation"
+            type="text"
+            name="organizationLocation"
+            [placeholder]="'signup.organizationLocationPlaceholder' | translate"
+            [ngModel]="organizationLocation()"
+            (ngModelChange)="organizationLocation.set($event)"
+          />
+        </div>
       } @else {
         <p class="auth-info">{{ 'signup.consultantInfo' | translate }}</p>
       }

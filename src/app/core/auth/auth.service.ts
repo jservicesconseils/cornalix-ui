@@ -184,9 +184,9 @@ export class AuthService {
   // connexion, creation de l'organisation (devient ADMIN_PME), puis
   // rafraichissement du jeton pour que l'UI reflete immediatement le
   // nouveau tenant_id/role sans demander a l'utilisateur de se reconnecter.
-  async completeRegistration(email: string, password: string, organizationName: string): Promise<void> {
+  async completeRegistration(email: string, password: string, organizationName: string, location?: string): Promise<void> {
     await this.login(email, password);
-    await this.organizationApi.register(organizationName);
+    await this.organizationApi.register(organizationName, location);
     await this.refresh();
     await this.loadPortfolio();
   }

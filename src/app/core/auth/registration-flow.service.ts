@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 // organizationName optionnel, pour qu'un oubli de branchement cote
 // ConfirmSignup soit une erreur de compilation plutot qu'un bug muet.
 export type PendingRegistration =
-  | { accountType: 'PME'; email: string; password: string; organizationName: string }
+  | { accountType: 'PME'; email: string; password: string; organizationName: string; organizationLocation: string }
   | { accountType: 'CONSULTANT'; email: string; password: string };
 
 // Porte les donnees d'inscription (SCRUM-41) entre l'ecran Inscription

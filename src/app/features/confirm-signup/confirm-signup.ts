@@ -43,6 +43,7 @@ export class ConfirmSignup {
           this.pending.email,
           this.pending.password,
           this.pending.organizationName,
+          this.pending.organizationLocation,
         );
         this.registrationFlow.clear();
         this.router.navigate(['/tableau-de-bord']);
