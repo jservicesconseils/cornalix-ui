@@ -80,6 +80,55 @@
   </p-table>
 </div>
 
+<div class="card consultant-card">
+  <div class="card-header">
+    <h2>Accès consultants</h2>
+    <p class="card-subtitle">
+      Donnez accès à un consultant cybersécurité déjà inscrit -- révocable en tout temps, sans affecter ses autres
+      mandats.
+    </p>
+  </div>
+
+  <form class="consultant-grant-form" (ngSubmit)="grantConsultantAccess()">
+    <input
+      pInputText
+      type="email"
+      placeholder="Courriel du consultant..."
+      [ngModel]="consultantEmail()"
+      (ngModelChange)="consultantEmail.set($event)"
+      name="consultantEmail"
+      required
+    />
+    <button type="submit" class="btn-primary" [disabled]="consultantSubmitting()">
+      {{ consultantSubmitting() ? '...' : 'Donner accès' }}
+    </button>
+  </form>
+
+  @if (consultantError()) {
+    <p class="invite-error" role="alert">{{ consultantError() }}</p>
+  }
+
+  @if (consultantAccesses().length > 0) {
+    <ul class="consultant-list">
+      @for (access of consultantAccesses(); track access.id) {
+        <li>
+          <span class="mono">{{ access.consultantEmail }}</span>
+          <button
+            type="button"
+            class="icon-btn-flat"
+            aria-label="Retirer l'accès"
+            (click)="revokeConsultantAccess(access)"
+          >
+            <i class="pi pi-trash"></i>
+          </button>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="empty-cell">Aucun consultant n'a accès à cette organisation.</p>
+  }
+</div>
+
 <p-dialog
   header="Inviter un utilisateur"
   [(visible)]="inviteDialogVisible"

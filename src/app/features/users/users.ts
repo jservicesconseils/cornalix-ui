@@ -9,6 +9,7 @@ import { Select } from 'primeng/select';
 
 import { OrgMember, ROLE_LABELS, UserRole } from '../../core/models/user.model';
 import { UserApiService } from '../../core/user/user-api.service';
+import { ConsultantAccess, ConsultantAccessApiService } from '../../core/consultant/consultant-access-api.service';
 import { tenantFeature } from '../../core/state/tenant/tenant.reducer';
 
 type RoleFilter = 'ALL' | UserRole;
@@ -29,10 +30,16 @@ const INVITABLE_ROLES: UserRole[] = ['ADMIN_PME', 'RESPONSABLE_TI', 'EMPLOYE'];
 export class Users {
   private readonly store = inject(Store);
   private readonly userApi = inject(UserApiService);
+  private readonly consultantAccessApi = inject(ConsultantAccessApiService);
 
   private readonly currentOrganizationId = this.store.selectSignal(tenantFeature.selectCurrentOrganizationId);
 
   protected readonly members = signal<OrgMember[]>([]);
+
+  protected readonly consultantAccesses = signal<ConsultantAccess[]>([]);
+  protected readonly consultantEmail = signal('');
+  protected readonly consultantSubmitting = signal(false);
+  protected readonly consultantError = signal<string | null>(null);
 
   protected readonly inviteRoleOptions = INVITABLE_ROLES.map((role) => ({ label: ROLE_LABELS[role], value: role }));
   protected readonly inviteDialogVisible = signal(false);
@@ -49,6 +56,7 @@ export class Users {
         return;
       }
       this.userApi.list(organizationId).then((members) => this.members.set(members));
+      this.consultantAccessApi.list(organizationId).then((accesses) => this.consultantAccesses.set(accesses));
     });
   }
 
@@ -123,5 +131,39 @@ export class Users {
 
     await this.userApi.remove(organizationId, member.id);
     this.members.update((current) => current.filter((m) => m.id !== member.id));
+  }
+
+  protected async grantConsultantAccess(): Promise<void> {
+    const organizationId = this.currentOrganizationId();
+    if (!organizationId || this.consultantSubmitting()) {
+      return;
+    }
+
+    this.consultantSubmitting.set(true);
+    this.consultantError.set(null);
+    try {
+      const access = await this.consultantAccessApi.grant(organizationId, this.consultantEmail().trim());
+      this.consultantAccesses.update((current) => [...current, access]);
+      this.consultantEmail.set('');
+    } catch {
+      this.consultantError.set(
+        "Impossible de donner l'accès -- vérifiez que ce courriel correspond à un compte Consultant déjà inscrit.",
+      );
+    } finally {
+      this.consultantSubmitting.set(false);
+    }
+  }
+
+  protected async revokeConsultantAccess(access: ConsultantAccess): Promise<void> {
+    const organizationId = this.currentOrganizationId();
+    if (!organizationId) {
+      return;
+    }
+    if (!confirm(`Retirer l'accès de ${access.consultantEmail} ?`)) {
+      return;
+    }
+
+    await this.consultantAccessApi.revoke(organizationId, access.id);
+    this.consultantAccesses.update((current) => current.filter((a) => a.id !== access.id));
   }
 }
