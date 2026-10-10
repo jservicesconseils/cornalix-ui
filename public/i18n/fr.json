@@ -20,15 +20,55 @@
     "rememberMe": "Se souvenir de moi",
     "forgotPassword": "Mot de passe oublié ?",
     "submit": "Se connecter",
-    "or": "ou",
-    "google": "Se connecter avec Google",
     "noAccount": "Vous n'avez pas de compte ?",
-    "contactUs": "Contacter notre équipe",
+    "createAccount": "Créer un compte",
     "benefits": {
       "assess": "Évaluez vos risques",
       "measure": "Mesurez votre maturité",
       "act": "Passez à l'action"
     },
     "footer": "Des entreprises québécoises plus sécurisées, aujourd'hui."
+  },
+  "signup": {
+    "title": "Créer votre compte",
+    "instructions": "Démarrez votre évaluation de maturité en cybersécurité.",
+    "organizationName": "Nom de l'organisation",
+    "fullName": "Nom complet",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordMismatch": "Les mots de passe ne correspondent pas.",
+    "submit": "Créer le compte",
+    "haveAccount": "Déjà un compte ?",
+    "signIn": "Se connecter"
+  },
+  "confirmSignup": {
+    "title": "Confirmez votre courriel",
+    "instructions": "Nous avons envoyé un code de vérification à {{email}}.",
+    "code": "Code de vérification",
+    "submit": "Confirmer",
+    "resend": "Vous n'avez pas reçu le code ? Renvoyer",
+    "resendSent": "Un nouveau code a été envoyé."
+  },
+  "forgotPassword": {
+    "title": "Mot de passe oublié",
+    "instructions": "Entrez votre courriel pour recevoir un code de réinitialisation.",
+    "submit": "Envoyer le code",
+    "backToLogin": "Retour à la connexion",
+    "sentInstructions": "Si un compte existe pour {{email}}, un code a été envoyé. Entrez-le ci-dessous avec votre nouveau mot de passe."
+  },
+  "resetPassword": {
+    "title": "Réinitialiser votre mot de passe",
+    "code": "Code de vérification",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "submit": "Réinitialiser",
+    "success": "Mot de passe réinitialisé. Vous pouvez maintenant vous connecter."
+  },
+  "passwordRequirements": {
+    "length": "12 caractères minimum",
+    "uppercase": "Une majuscule",
+    "lowercase": "Une minuscule",
+    "number": "Un chiffre",
+    "symbol": "Un caractère spécial"
   }
 }

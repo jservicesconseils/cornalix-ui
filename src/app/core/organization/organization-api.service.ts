@@ -28,4 +28,17 @@ export class OrganizationApiService {
     );
     return dtos.map(toOrganization);
   }
+
+  // Auto-inscription (SCRUM-41) : cree l'organisation et fait de
+  // l'appelant son premier ADMIN_PME (POST /api/v1/organizations/register,
+  // cornalix-ms-identity -- distinct de POST /api/v1/organizations qui
+  // n'a aucun effet de bord sur l'appelant).
+  async register(organizationName: string): Promise<Organization> {
+    const dto = await firstValueFrom(
+      this.http.post<OrganizationResponseDto>(`${API_BASE_URLS.identity}/api/v1/organizations/register`, {
+        name: organizationName,
+      }),
+    );
+    return toOrganization(dto);
+  }
 }

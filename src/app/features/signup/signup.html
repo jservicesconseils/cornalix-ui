@@ -1,0 +1,90 @@
+<div class="auth-page">
+  <div class="auth-card-wrap">
+    <form class="auth-card" (ngSubmit)="submit()">
+      <h2>{{ 'signup.title' | translate }}</h2>
+      <p class="auth-instructions">{{ 'signup.instructions' | translate }}</p>
+
+      <div class="field">
+        <label for="organizationName">{{ 'signup.organizationName' | translate }}</label>
+        <input
+          pInputText
+          id="organizationName"
+          type="text"
+          name="organizationName"
+          [ngModel]="organizationName()"
+          (ngModelChange)="organizationName.set($event)"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="fullName">{{ 'signup.fullName' | translate }}</label>
+        <input
+          pInputText
+          id="fullName"
+          type="text"
+          name="fullName"
+          [ngModel]="fullName()"
+          (ngModelChange)="fullName.set($event)"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="email">{{ 'login.email' | translate }}</label>
+        <input
+          pInputText
+          id="email"
+          type="email"
+          name="email"
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          autocomplete="username"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">{{ 'signup.password' | translate }}</label>
+        <p-password
+          inputId="password"
+          name="password"
+          [ngModel]="password()"
+          (ngModelChange)="password.set($event)"
+          [feedback]="false"
+          [toggleMask]="true"
+          styleClass="full-width-password"
+          autocomplete="new-password"
+        />
+        <app-password-requirements [password]="password()" />
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">{{ 'signup.confirmPassword' | translate }}</label>
+        <p-password
+          inputId="confirmPassword"
+          name="confirmPassword"
+          [ngModel]="confirmPassword()"
+          (ngModelChange)="confirmPassword.set($event)"
+          [feedback]="false"
+          [toggleMask]="true"
+          styleClass="full-width-password"
+          autocomplete="new-password"
+        />
+      </div>
+
+      @if (errorMessage(); as error) {
+        <p class="auth-error" role="alert">{{ error }}</p>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="submitting()">
+        {{ submitting() ? '...' : ('signup.submit' | translate) }}
+      </button>
+
+      <p class="auth-footer-link">
+        {{ 'signup.haveAccount' | translate }}
+        <a routerLink="/connexion">{{ 'signup.signIn' | translate }}</a>
+      </p>
+    </form>
+  </div>
+</div>

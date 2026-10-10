@@ -4,8 +4,18 @@ import {
   CognitoIdentityProviderClient,
   InitiateAuthCommand,
   GlobalSignOutCommand,
+  SignUpCommand,
+  ConfirmSignUpCommand,
+  ResendConfirmationCodeCommand,
+  ForgotPasswordCommand,
+  ConfirmForgotPasswordCommand,
   NotAuthorizedException,
   UserNotFoundException,
+  UsernameExistsException,
+  InvalidPasswordException,
+  CodeMismatchException,
+  ExpiredCodeException,
+  LimitExceededException,
 } from '@aws-sdk/client-cognito-identity-provider';
 
 import { AppUser, parseRole } from '../models/user.model';
@@ -19,6 +29,9 @@ import { decodeJwtPayload, CognitoIdTokenClaims } from './jwt.util';
 import { OrganizationApiService } from '../organization/organization-api.service';
 
 export class LoginFailedError extends Error {}
+export class SignUpFailedError extends Error {}
+export class ConfirmSignUpFailedError extends Error {}
+export class ForgotPasswordFailedError extends Error {}
 
 // Le App Client ne permet que USER_PASSWORD_AUTH + REFRESH_TOKEN_AUTH (pas
 // de SRP, voir SCRUM-27) -- InitiateAuthCommand appelle l'API publique de
@@ -94,10 +107,122 @@ export class AuthService {
         refreshToken: tokens.RefreshToken ?? stored.refreshToken,
         expiresAt: Date.now() + (tokens.ExpiresIn ?? 3600) * 1000,
       });
+
+      // Reconstruit l'utilisateur a partir du jeton rafraichi -- important
+      // juste apres une auto-inscription (SCRUM-41) : tenant_id/role
+      // n'existaient pas sur le jeton obtenu au premier login, seul un
+      // jeton rafraichi apres coup les porte.
+      const claims = decodeJwtPayload<CognitoIdTokenClaims>(tokens.IdToken);
+      this.store.dispatch(AuthActions.login({ user: this.buildUser(claims) }));
+
       return tokens.AccessToken;
     } catch {
       this.logout();
       return null;
+    }
+  }
+
+  // Cree le compte Cognito (statut UNCONFIRMED) -- auto_verified_attributes
+  // = ["email"] sur le Pool declenche automatiquement l'envoi d'un code de
+  // verification a cette adresse, sans configuration cote applicatif.
+  async signUp(email: string, password: string, name: string): Promise<void> {
+    try {
+      await this.cognito.send(
+        new SignUpCommand({
+          ClientId: COGNITO_CONFIG.clientId,
+          Username: email,
+          Password: password,
+          UserAttributes: [
+            { Name: 'email', Value: email },
+            { Name: 'name', Value: name },
+          ],
+        }),
+      );
+    } catch (error) {
+      if (error instanceof UsernameExistsException) {
+        throw new SignUpFailedError('Un compte existe déjà avec ce courriel.');
+      }
+      if (error instanceof InvalidPasswordException) {
+        throw new SignUpFailedError(
+          'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.',
+        );
+      }
+      throw new SignUpFailedError("La création du compte a échoué. Réessayez dans un instant.");
+    }
+  }
+
+  async confirmSignUp(email: string, code: string): Promise<void> {
+    try {
+      await this.cognito.send(
+        new ConfirmSignUpCommand({ ClientId: COGNITO_CONFIG.clientId, Username: email, ConfirmationCode: code }),
+      );
+    } catch (error) {
+      if (error instanceof CodeMismatchException) {
+        throw new ConfirmSignUpFailedError('Le code saisi est incorrect.');
+      }
+      if (error instanceof ExpiredCodeException) {
+        throw new ConfirmSignUpFailedError('Ce code a expiré -- demandez-en un nouveau.');
+      }
+      throw new ConfirmSignUpFailedError('La confirmation a échoué. Réessayez dans un instant.');
+    }
+  }
+
+  async resendConfirmationCode(email: string): Promise<void> {
+    try {
+      await this.cognito.send(new ResendConfirmationCodeCommand({ ClientId: COGNITO_CONFIG.clientId, Username: email }));
+    } catch (error) {
+      if (error instanceof LimitExceededException) {
+        throw new ConfirmSignUpFailedError('Trop de tentatives -- réessayez dans quelques minutes.');
+      }
+      throw new ConfirmSignUpFailedError("L'envoi du code a échoué. Réessayez dans un instant.");
+    }
+  }
+
+  // Termine l'auto-inscription (SCRUM-41) une fois le compte confirme :
+  // connexion, creation de l'organisation (devient ADMIN_PME), puis
+  // rafraichissement du jeton pour que l'UI reflete immediatement le
+  // nouveau tenant_id/role sans demander a l'utilisateur de se reconnecter.
+  async completeRegistration(email: string, password: string, organizationName: string): Promise<void> {
+    await this.login(email, password);
+    await this.organizationApi.register(organizationName);
+    await this.refresh();
+    await this.loadPortfolio();
+  }
+
+  async forgotPassword(email: string): Promise<void> {
+    try {
+      await this.cognito.send(new ForgotPasswordCommand({ ClientId: COGNITO_CONFIG.clientId, Username: email }));
+    } catch {
+      // Cognito renvoie UserNotFoundException si le compte n'existe pas --
+      // volontairement avale : un message identique, qu'un compte existe
+      // ou non pour ce courriel, evite de confirmer a un attaquant qu'une
+      // adresse est enregistree.
+    }
+  }
+
+  async confirmForgotPassword(email: string, code: string, newPassword: string): Promise<void> {
+    try {
+      await this.cognito.send(
+        new ConfirmForgotPasswordCommand({
+          ClientId: COGNITO_CONFIG.clientId,
+          Username: email,
+          ConfirmationCode: code,
+          Password: newPassword,
+        }),
+      );
+    } catch (error) {
+      if (error instanceof CodeMismatchException) {
+        throw new ForgotPasswordFailedError('Le code saisi est incorrect.');
+      }
+      if (error instanceof ExpiredCodeException) {
+        throw new ForgotPasswordFailedError('Ce code a expiré -- demandez-en un nouveau.');
+      }
+      if (error instanceof InvalidPasswordException) {
+        throw new ForgotPasswordFailedError(
+          'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.',
+        );
+      }
+      throw new ForgotPasswordFailedError('La réinitialisation a échoué. Réessayez dans un instant.');
     }
   }
 
