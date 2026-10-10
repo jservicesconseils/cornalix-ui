@@ -8,14 +8,14 @@ import {
   UserNotFoundException,
 } from '@aws-sdk/client-cognito-identity-provider';
 
-import { AppUser, UserRole } from '../models/user.model';
+import { AppUser, parseRole } from '../models/user.model';
 import { Organization } from '../models/organization.model';
 import { AuthActions } from '../state/auth/auth.actions';
 import { authFeature } from '../state/auth/auth.reducer';
 import { TenantActions } from '../state/tenant/tenant.actions';
 import { COGNITO_CONFIG } from './cognito-config';
 import { TokenStorageService } from './token-storage.service';
-import { decodeJwtPayload, parseTenantScope, CognitoIdTokenClaims } from './jwt.util';
+import { decodeJwtPayload, CognitoIdTokenClaims } from './jwt.util';
 import { OrganizationApiService } from '../organization/organization-api.service';
 
 export class LoginFailedError extends Error {}
@@ -118,18 +118,15 @@ export class AuthService {
   }
 
   private buildUser(claims: CognitoIdTokenClaims): AppUser {
-    const tenantId = claims.tenant_id ?? '';
-    const tenantScope = parseTenantScope(claims.tenant_scope, tenantId);
     const email = claims.email ?? claims.sub;
     const localPart = email.split('@')[0];
-    const role: UserRole = tenantScope.length > 1 ? 'CONSULTANT' : 'ADMIN_PME';
 
     return {
       id: claims.sub,
       name: localPart.charAt(0).toUpperCase() + localPart.slice(1),
       initials: localPart.slice(0, 2).toUpperCase(),
       email,
-      role,
+      role: parseRole(claims.role),
     };
   }
 

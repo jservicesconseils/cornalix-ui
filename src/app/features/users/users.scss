@@ -99,3 +99,31 @@
   color: var(--ink-faint);
   padding: 24px 0;
 }
+
+.invite-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-top: 10px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  input,
+  p-select {
+    width: 100%;
+  }
+}
+
+.invite-error {
+  color: var(--danger, #c0392b);
+  font-size: 12.5px;
+  margin-top: 10px;
+}
