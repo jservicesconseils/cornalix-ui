@@ -19,16 +19,16 @@ interface NavItem {
   icon: string;
   route: string;
   roles?: UserRole[];
-  disabled?: boolean;
 }
 
+// "Parametres" retire (SCRUM-53) : lien mort (disabled, sans route
+// enregistree) visible en permanence sans aucun ecran derriere.
 const NAV_ITEMS: NavItem[] = [
   { label: 'nav.dashboard', icon: 'pi pi-home', route: '/tableau-de-bord' },
   { label: 'nav.portfolio', icon: 'pi pi-briefcase', route: '/portefeuille', roles: ['CONSULTANT'] },
   { label: 'nav.questionnaire', icon: 'pi pi-list-check', route: '/questionnaire' },
   { label: 'nav.reports', icon: 'pi pi-chart-bar', route: '/rapports' },
   { label: 'nav.users', icon: 'pi pi-users', route: '/utilisateurs', roles: ['ADMIN_PME', 'CONSULTANT'] },
-  { label: 'nav.settings', icon: 'pi pi-cog', route: '/parametres', disabled: true },
 ];
 
 @Component({

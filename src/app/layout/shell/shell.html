@@ -31,17 +31,10 @@
 
     <nav class="nav">
       @for (item of navItems(); track item.route) {
-        @if (item.disabled) {
-          <span class="nav-link nav-link--disabled">
-            <i [class]="item.icon"></i>
-            {{ item.label | translate }}
-          </span>
-        } @else {
-          <a class="nav-link" [routerLink]="item.route" routerLinkActive="active">
-            <i [class]="item.icon"></i>
-            {{ item.label | translate }}
-          </a>
-        }
+        <a class="nav-link" [routerLink]="item.route" routerLinkActive="active">
+          <i [class]="item.icon"></i>
+          {{ item.label | translate }}
+        </a>
       }
     </nav>
 
