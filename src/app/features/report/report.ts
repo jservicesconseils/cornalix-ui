@@ -95,4 +95,13 @@ export class Report {
     if (answer === 'NO') return 'badge--no';
     return 'badge--partial';
   }
+
+  // SCRUM-48 : export "PDF" via l'impression navigateur plutot qu'une
+  // librairie dediee (client ou serveur) -- aucune nouvelle dependance,
+  // reutilise le rendu deja a jour de l'ecran. La feuille @media print
+  // (report.scss/styles.scss) force l'affichage de tous les onglets et
+  // masque le chrome de l'app (sidebar/topbar/actions).
+  protected exportPdf(): void {
+    window.print();
+  }
 }
