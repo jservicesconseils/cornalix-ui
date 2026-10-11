@@ -25,13 +25,14 @@ interface AnswerResponseDto {
 // Le modele Question cote frontend garde un seul champ texte
 // (cisReference) alors que le backend separe cisControl/cisSafeguard --
 // compose ici plutot que d'eclater le modele pour un seul consommateur.
-function toQuestion(dto: QuestionResponseDto, answer: AnswerValue | null): Question {
+function toQuestion(dto: QuestionResponseDto, answer: AnswerResponseDto | undefined): Question {
   return {
     id: dto.id,
     categoryKey: dto.nistFunction,
     cisReference: formatCisReference(dto.cisControl, dto.cisSafeguard),
     text: pickQuestionText(dto.translations),
-    answer,
+    answer: answer?.value ?? null,
+    answeredAt: answer?.answeredAt ?? null,
   };
 }
 
@@ -55,16 +56,21 @@ export class DiagnosticApiService {
       ),
     ]);
 
-    const answerByQuestionId = new Map(answerDtos.map((dto) => [dto.questionId, dto.value]));
-    return questionDtos.map((dto) => toQuestion(dto, answerByQuestionId.get(dto.id) ?? null));
+    const answerByQuestionId = new Map(answerDtos.map((dto) => [dto.questionId, dto]));
+    return questionDtos.map((dto) => toQuestion(dto, answerByQuestionId.get(dto.id)));
   }
 
-  async saveAnswer(organizationId: string, questionId: string, value: AnswerValue): Promise<void> {
-    await firstValueFrom(
+  // SCRUM-51 : renvoie l'horodatage de la reponse enregistree (pas la date
+  // locale au moment du clic) pour que l'etat optimiste du questionnaire
+  // reste exact si l'appel echoue silencieusement ou si l'horloge du
+  // serveur differe de celle du navigateur.
+  async saveAnswer(organizationId: string, questionId: string, value: AnswerValue): Promise<string> {
+    const response = await firstValueFrom(
       this.http.put<AnswerResponseDto>(
         `${API_BASE_URLS.diagnostic}/api/v1/diagnostics/organizations/${organizationId}/answers/${questionId}`,
         { value },
       ),
     );
+    return response.answeredAt;
   }
 }

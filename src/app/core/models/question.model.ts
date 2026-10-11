@@ -13,6 +13,9 @@ export interface Question {
   cisReference: string;
   text: string;
   answer: AnswerValue | null;
+  // SCRUM-51 : date de la derniere modification de la reponse (ISO 8601),
+  // nulle tant qu'aucune reponse n'a ete donnee.
+  answeredAt: string | null;
 }
 
 // Format commun de citation CIS Controls v8 ("CIS <controle> — <safeguard>"),

@@ -42,6 +42,7 @@ function toAnsweredQuestion(dto: AnsweredQuestionDto): Question {
     cisReference: formatCisReference(dto.cisControl, dto.cisSafeguard),
     text: pickQuestionText(dto.translations),
     answer: dto.value,
+    answeredAt: dto.answeredAt,
   };
 }
 
