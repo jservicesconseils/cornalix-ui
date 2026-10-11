@@ -183,3 +183,34 @@ a {
     }
   }
 }
+
+// SCRUM-48 : export PDF via l'impression navigateur (window.print(),
+// voir report.ts) -- chrome applicatif (sidebar/topbar/voile) masque et
+// le conteneur 100vh/overflow:hidden du Shell repasse en flux normal
+// pour laisser l'impression paginer tout le contenu, pas juste l'ecran
+// visible. Regles globales (pas scopees a un composant) puisque .shell/
+// .sidebar/.topbar/.content sont definies dans shell.scss.
+@media print {
+  .sidebar,
+  .sidebar-backdrop,
+  .hamburger-btn,
+  .topbar {
+    display: none !important;
+  }
+
+  .shell,
+  .main-area {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .content {
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: #fff;
+  }
+}

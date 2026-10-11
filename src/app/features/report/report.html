@@ -9,9 +9,16 @@
     </p>
   </div>
   <div class="header-actions">
-    <button type="button" class="btn-secondary"><i class="pi pi-download"></i> Exporter (PDF)</button>
+    <button type="button" class="btn-secondary" (click)="exportPdf()"><i class="pi pi-download"></i> Exporter (PDF)</button>
     <button type="button" class="btn-primary"><i class="pi pi-share-alt"></i> Partager</button>
   </div>
+</div>
+
+<div class="print-heading">
+  <h1>Rapport de cybersécurité</h1>
+  @if (currentOrganization(); as org) {
+    <p>{{ org.name }} · Score global : {{ overallScoreLabel() }}</p>
+  }
 </div>
 
 <app-async-state [loading]="loading()" [error]="errorMessage()">
