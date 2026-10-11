@@ -10,12 +10,13 @@ import { CisControlScore, NistFunctionScore } from '../../core/models/organizati
 import { ScoringApiService } from '../../core/scoring/scoring-api.service';
 import { tenantFeature } from '../../core/state/tenant/tenant.reducer';
 import { RadarChart } from '../../shared/radar-chart/radar-chart';
+import { TrendChart, TrendPoint } from '../../shared/trend-chart/trend-chart';
 import { AsyncState } from '../../shared/async-state/async-state';
 import { toErrorMessage } from '../../shared/async-state/http-error.util';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, RadarChart, LucideRefreshCw, LucideCheck, LucideArrowRight, LucideFlag, AsyncState],
+  imports: [RouterLink, RadarChart, TrendChart, LucideRefreshCw, LucideCheck, LucideArrowRight, LucideFlag, AsyncState],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -45,6 +46,8 @@ export class Dashboard {
   // taille du catalogue, qui peut en couvrir davantage sans reponse.
   protected readonly cisControlsCoveredCount = signal(0);
 
+  protected readonly scoreHistory = signal<TrendPoint[]>([]);
+
   protected readonly loading = signal(true);
   protected readonly errorMessage = signal<string | null>(null);
 
@@ -66,8 +69,9 @@ export class Dashboard {
       Promise.all([
         this.scoringApi.getScore(organizationId),
         this.diagnosticApi.listQuestionsWithAnswers(organizationId),
+        this.scoringApi.getHistory(organizationId),
       ])
-        .then(([score, questions]) => {
+        .then(([score, questions, history]) => {
           this.overallScore.set(score.overallScore);
           this.cisControlsCoveredCount.set(Object.keys(score.scoreByCisControl).length);
           this.nistFunctionScores.set(
@@ -78,6 +82,7 @@ export class Dashboard {
           );
           this.answeredCount.set(questions.filter((q) => q.answer !== null).length);
           this.totalCount.set(questions.length);
+          this.scoreHistory.set(history);
         })
         .catch((error) => this.errorMessage.set(toErrorMessage(error)))
         .finally(() => this.loading.set(false));

@@ -22,6 +22,16 @@ export interface ScoreSnapshot {
   scoreByCisControl: Record<string, number>;
 }
 
+interface ScoreHistoryPointDto {
+  date: string;
+  overallScore: number | null;
+}
+
+export interface ScoreHistoryPoint {
+  date: string;
+  overallScore: number | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ScoringApiService {
   private readonly http = inject(HttpClient);
@@ -33,6 +43,17 @@ export class ScoringApiService {
       ),
     );
     return toSnapshot(dto);
+  }
+
+  // Tendance du score global dans le temps (SCRUM-47) -- au plus un
+  // point par jour civil cote backend.
+  async getHistory(organizationId: string): Promise<ScoreHistoryPoint[]> {
+    const dtos = await firstValueFrom(
+      this.http.get<ScoreHistoryPointDto[]>(
+        `${API_BASE_URLS.scoring}/api/v1/scoring/organizations/${organizationId}/score/history`,
+      ),
+    );
+    return dtos.map((dto) => ({ date: dto.date, overallScore: toPercent(dto.overallScore) }));
   }
 
   // Score de plusieurs organisations en un seul appel (SCRUM-43) --

@@ -40,6 +40,11 @@
         </div>
       </div>
 
+      <div class="card">
+        <div class="card-title">Tendance du score global</div>
+        <app-trend-chart [points]="scoreHistory()" />
+      </div>
+
       <div class="overview-grid two-cols">
         <div class="card">
           <div class="card-title">Score par fonction NIST CSF 2.0</div>

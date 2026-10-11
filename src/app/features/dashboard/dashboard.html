@@ -110,6 +110,11 @@
   </div>
 
   <div class="card">
+    <div class="card-title">Tendance du score global</div>
+    <app-trend-chart [points]="scoreHistory()" />
+  </div>
+
+  <div class="card">
     <div class="card-title">Score par contrôle CIS v8</div>
     <div class="cis-list">
       @for (control of cisControlScores(); track control.number) {
