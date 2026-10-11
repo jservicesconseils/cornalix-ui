@@ -179,3 +179,9 @@
   font-size: 12.5px;
   margin-top: 10px;
 }
+
+@media (max-width: 560px) {
+  .consultant-grant-form {
+    flex-direction: column;
+  }
+}

@@ -136,3 +136,26 @@
 .r-text {
   font-size: 14.5px;
 }
+
+@media (max-width: 860px) {
+  .overview-grid {
+    grid-template-columns: 1fr;
+
+    &.two-cols {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .summary-card {
+    grid-column: auto;
+  }
+
+  .bar-row {
+    grid-template-columns: 100px 1fr 36px;
+    gap: 8px;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+  }
+}
