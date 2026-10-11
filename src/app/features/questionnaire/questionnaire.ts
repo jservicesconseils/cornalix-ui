@@ -98,7 +98,11 @@ export class Questionnaire {
     // Persistance best-effort : l'etat local est deja mis a jour de
     // maniere optimiste, on ne bloque pas la navigation sur le reseau.
     // Pas d'indicateur d'echec visible pour l'instant (hors scope).
-    void this.diagnosticApi.saveAnswer(organizationId, current.id, value);
+    // SCRUM-51 : une fois la reponse enregistree, on complete l'horodatage
+    // avec celui renvoye par le serveur (pas une date locale devinee).
+    void this.diagnosticApi.saveAnswer(organizationId, current.id, value).then((answeredAt) => {
+      this.questions.update((all) => all.map((q) => (q.id === current.id ? { ...q, answeredAt } : q)));
+    });
   }
 
   protected previous(): void {
@@ -137,5 +141,14 @@ export class Questionnaire {
       this.selectedIndex() === this.currentCategoryQuestions().length - 1 &&
       categoryIndex === this.categories.length - 1
     );
+  }
+
+  // SCRUM-51 : formatage local plutot que DatePipe -- aucune locale
+  // francaise enregistree dans l'app (DatePipe retomberait sur l'anglais).
+  // Meme approche que shared/trend-chart/trend-chart.ts.
+  protected formatLastModified(iso: string): string {
+    const d = new Date(iso);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} à ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 }
