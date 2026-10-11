@@ -88,6 +88,10 @@ a {
   border-radius: 12px;
   box-shadow: var(--shadow-card);
   padding: 22px 24px;
+  // SCRUM-52 : un tableau (ex. p-table sur Utilisateurs) plus large que
+  // la carte scrolle horizontalement dans la carte au lieu de faire
+  // deborder toute la page sur petit ecran.
+  overflow-x: auto;
 }
 
 .card-title {
@@ -162,5 +166,20 @@ a {
   &--no {
     background: var(--no-soft);
     color: var(--no);
+  }
+}
+
+// SCRUM-52 : .page-header est partage par Tableau de bord, Portefeuille,
+// Questionnaire, Rapport et Utilisateurs -- un seul correctif ici couvre
+// l'empilement titre/actions sur petit ecran pour les cinq.
+@media (max-width: 860px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+
+    h1 {
+      font-size: 22px;
+    }
   }
 }

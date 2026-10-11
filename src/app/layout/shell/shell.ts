@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -53,6 +53,19 @@ export class Shell {
     const role = this.user()?.role;
     return NAV_ITEMS.filter((item) => !item.roles || (role && item.roles.includes(role)));
   });
+
+  // SCRUM-52 : sidebar fixe (240px) sans place sur mobile/tablette --
+  // devient un tiroir hors-canevas sous le seuil defini dans shell.scss,
+  // ouvert/ferme via ce signal (bouton hamburger + clic sur le voile).
+  protected readonly mobileNavOpen = signal(false);
+
+  protected toggleMobileNav(): void {
+    this.mobileNavOpen.update((open) => !open);
+  }
+
+  protected closeMobileNav(): void {
+    this.mobileNavOpen.set(false);
+  }
 
   protected readonly userMenuItems: MenuItem[] = [
     {
