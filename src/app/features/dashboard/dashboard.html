@@ -11,6 +11,7 @@
   </div>
 </div>
 
+<app-async-state [loading]="loading()" [error]="errorMessage()">
 <div class="stat-grid">
   <div class="card stat-card">
     <div class="score-ring" [style.--pct]="overallScorePct()"></div>
@@ -109,6 +110,11 @@
   </div>
 
   <div class="card">
+    <div class="card-title">Tendance du score global</div>
+    <app-trend-chart [points]="scoreHistory()" />
+  </div>
+
+  <div class="card">
     <div class="card-title">Score par contrôle CIS v8</div>
     <div class="cis-list">
       @for (control of cisControlScores(); track control.number) {
@@ -184,3 +190,4 @@
     </div>
   </div>
 </div>
+</app-async-state>

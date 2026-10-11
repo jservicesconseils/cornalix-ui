@@ -7,10 +7,12 @@ import { InputText } from 'primeng/inputtext';
 import { ScoringApiService } from '../../core/scoring/scoring-api.service';
 import { tenantFeature } from '../../core/state/tenant/tenant.reducer';
 import { TenantActions } from '../../core/state/tenant/tenant.actions';
+import { AsyncState } from '../../shared/async-state/async-state';
+import { toErrorMessage } from '../../shared/async-state/http-error.util';
 
 @Component({
   selector: 'app-portfolio',
-  imports: [FormsModule, InputText],
+  imports: [FormsModule, InputText, AsyncState],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.scss',
 })
@@ -27,6 +29,13 @@ export class Portfolio {
   // le vrai score par organisation est recupere ici une fois le
   // portefeuille charge, pas par l'API organisations elle-meme.
   private readonly scoreByOrgId = signal<Record<string, number>>({});
+
+  // Portefeuille vide (ex. Consultant qui vient de s'inscrire, SCRUM-41)
+  // n'est jamais un etat "chargement" ni "erreur" -- loading reste faux
+  // tant qu'il n'y a rien a charger, le gabarit #emptymessage existant
+  // s'en charge.
+  protected readonly loading = signal(false);
+  protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly filteredPortfolio = computed(() => {
     const scores = this.scoreByOrgId();
@@ -46,11 +55,20 @@ export class Portfolio {
         return;
       }
 
-      Promise.all(
-        organizations.map((org) =>
-          this.scoringApi.getScore(org.id).then((score) => [org.id, score.overallScore ?? 0] as const),
-        ),
-      ).then((entries) => this.scoreByOrgId.set(Object.fromEntries(entries)));
+      this.loading.set(true);
+      this.errorMessage.set(null);
+
+      // Un seul appel pour tout le portefeuille plutot qu'un par
+      // organisation (SCRUM-43) -- cornalix-ms-scoring calcule les N
+      // scores server-side, en parallele.
+      this.scoringApi
+        .getScores(organizations.map((org) => org.id))
+        .then((scores) => {
+          const entries = Object.entries(scores).map(([orgId, score]) => [orgId, score.overallScore ?? 0] as const);
+          this.scoreByOrgId.set(Object.fromEntries(entries));
+        })
+        .catch((error) => this.errorMessage.set(toErrorMessage(error)))
+        .finally(() => this.loading.set(false));
     });
   }
 

@@ -1,0 +1,13 @@
+@if (loading()) {
+  <div class="async-state async-state--loading">
+    <span class="spinner" aria-hidden="true"></span>
+    <p>Chargement...</p>
+  </div>
+} @else if (error()) {
+  <div class="async-state async-state--error" role="alert">
+    <i class="pi pi-exclamation-triangle"></i>
+    <p>{{ error() }}</p>
+  </div>
+} @else {
+  <ng-content />
+}

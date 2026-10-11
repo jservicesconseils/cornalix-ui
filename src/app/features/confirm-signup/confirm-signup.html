@@ -1,0 +1,39 @@
+<div class="auth-page">
+  <div class="auth-card-wrap">
+    <form class="auth-card" (ngSubmit)="submit()">
+      <h2>{{ 'confirmSignup.title' | translate }}</h2>
+      <p class="auth-instructions">{{ 'confirmSignup.instructions' | translate: { email } }}</p>
+
+      <div class="field">
+        <label for="code">{{ 'confirmSignup.code' | translate }}</label>
+        <input
+          pInputText
+          id="code"
+          type="text"
+          name="code"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          [ngModel]="code()"
+          (ngModelChange)="code.set($event)"
+          required
+        />
+      </div>
+
+      @if (errorMessage(); as error) {
+        <p class="auth-error" role="alert">{{ error }}</p>
+      }
+
+      @if (resendMessage(); as message) {
+        <p class="auth-info">{{ message | translate }}</p>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="submitting()">
+        {{ submitting() ? '...' : ('confirmSignup.submit' | translate) }}
+      </button>
+
+      <button type="button" class="link-button" (click)="resend()">
+        {{ 'confirmSignup.resend' | translate }}
+      </button>
+    </form>
+  </div>
+</div>

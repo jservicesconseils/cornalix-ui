@@ -14,6 +14,19 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+# Certificat ACM (us-east-1) pour dev.cornalix.ca, cree cote
+# infra/prod/platform (cornalix-ms-identity) -- lu ici en lecture
+# seule, jamais recree.
+data "terraform_remote_state" "platform" {
+  backend = "s3"
+
+  config = {
+    bucket = "cornalix-tfstate-591859078355"
+    key    = "prod/platform/terraform.tfstate"
+    region = "ca-central-1"
+  }
+}
+
 ############################################
 # Bucket S3 -- jamais public directement, seul CloudFront (via Origin
 # Access Control) peut y lire des objets. Meme patron que
@@ -46,9 +59,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "frontend" {
 }
 
 ############################################
-# CloudFront -- pas de domaine personnalise pour dev (pas de certificat
-# ACM dedie non plus) : le domaine *.cloudfront.net genere par AWS
-# suffit pour un environnement de validation interne.
+# CloudFront -- domaine dev.cornalix.ca (certificat ACM dedie, cree
+# cote infra/prod/platform). Le domaine *.cloudfront.net genere par
+# AWS reste utilisable en parallele une fois l'alias configure.
 ############################################
 resource "aws_cloudfront_origin_access_control" "frontend" {
   name                              = "${var.project}-${var.environment}-frontend"
@@ -60,6 +73,7 @@ resource "aws_cloudfront_origin_access_control" "frontend" {
 resource "aws_cloudfront_distribution" "frontend" {
   enabled             = true
   default_root_object = "index.html"
+  aliases             = ["dev.${var.domain_name}"]
   price_class         = "PriceClass_100"
 
   origin {
@@ -102,7 +116,9 @@ resource "aws_cloudfront_distribution" "frontend" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = data.terraform_remote_state.platform.outputs.acm_frontend_certificate_arn_dev
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   tags = {

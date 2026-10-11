@@ -1,5 +1,9 @@
 <div class="shell">
-  <aside class="sidebar">
+  @if (mobileNavOpen()) {
+    <div class="sidebar-backdrop" (click)="closeMobileNav()"></div>
+  }
+
+  <aside class="sidebar" [class.sidebar--open]="mobileNavOpen()">
     <div class="brand">
       <svg viewBox="0 0 100 120" width="24" height="29" role="img" aria-label="Symbole Cornalix">
         <defs>
@@ -31,17 +35,10 @@
 
     <nav class="nav">
       @for (item of navItems(); track item.route) {
-        @if (item.disabled) {
-          <span class="nav-link nav-link--disabled">
-            <i [class]="item.icon"></i>
-            {{ item.label | translate }}
-          </span>
-        } @else {
-          <a class="nav-link" [routerLink]="item.route" routerLinkActive="active">
-            <i [class]="item.icon"></i>
-            {{ item.label | translate }}
-          </a>
-        }
+        <a class="nav-link" [routerLink]="item.route" routerLinkActive="active" (click)="closeMobileNav()">
+          <i [class]="item.icon"></i>
+          {{ item.label | translate }}
+        </a>
       }
     </nav>
 
@@ -53,6 +50,10 @@
 
   <div class="main-area">
     <header class="topbar">
+      <button type="button" class="hamburger-btn" aria-label="Ouvrir le menu" (click)="toggleMobileNav()">
+        <i class="pi pi-bars"></i>
+      </button>
+
       @if (portfolio().length > 0) {
         <p-select
           class="org-switch"

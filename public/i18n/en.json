@@ -5,7 +5,6 @@
     "questionnaire": "Questionnaire",
     "reports": "Reports",
     "users": "Users",
-    "settings": "Settings",
     "help": "Need help? Help center"
   },
   "login": {
@@ -20,15 +19,60 @@
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot password?",
     "submit": "Sign in",
-    "or": "or",
-    "google": "Sign in with Google",
     "noAccount": "Don't have an account?",
-    "contactUs": "Contact our team",
+    "createAccount": "Create an account",
     "benefits": {
       "assess": "Assess your risks",
       "measure": "Measure your maturity",
       "act": "Take action"
     },
     "footer": "Quebec businesses, more secure today."
+  },
+  "signup": {
+    "title": "Create your account",
+    "instructions": "Start your cybersecurity maturity assessment.",
+    "accountTypePme": "I'm an SME",
+    "accountTypeConsultant": "I'm a consultant",
+    "consultantInfo": "Your account will be created without an organization -- you manage a portfolio of clients rather than a single SME.",
+    "organizationName": "Organization name",
+    "organizationLocation": "City / region (optional)",
+    "organizationLocationPlaceholder": "E.g. Montreal, QC",
+    "fullName": "Full name",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "passwordMismatch": "Passwords do not match.",
+    "submit": "Create account",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in"
+  },
+  "confirmSignup": {
+    "title": "Confirm your email",
+    "instructions": "We sent a verification code to {{email}}.",
+    "code": "Verification code",
+    "submit": "Confirm",
+    "resend": "Didn't receive the code? Resend",
+    "resendSent": "A new code has been sent."
+  },
+  "forgotPassword": {
+    "title": "Forgot password",
+    "instructions": "Enter your email to receive a reset code.",
+    "submit": "Send code",
+    "backToLogin": "Back to sign in",
+    "sentInstructions": "If an account exists for {{email}}, a code has been sent. Enter it below with your new password."
+  },
+  "resetPassword": {
+    "title": "Reset your password",
+    "code": "Verification code",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "submit": "Reset",
+    "success": "Password reset. You can now sign in."
+  },
+  "passwordRequirements": {
+    "length": "At least 12 characters",
+    "uppercase": "One uppercase letter",
+    "lowercase": "One lowercase letter",
+    "number": "One number",
+    "symbol": "One special character"
   }
 }

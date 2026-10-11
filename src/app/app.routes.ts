@@ -7,6 +7,22 @@ export const routes: Routes = [
     loadComponent: () => import('./features/login/login').then((m) => m.Login),
   },
   {
+    path: 'inscription',
+    loadComponent: () => import('./features/signup/signup').then((m) => m.Signup),
+  },
+  {
+    path: 'confirmer-inscription',
+    loadComponent: () => import('./features/confirm-signup/confirm-signup').then((m) => m.ConfirmSignup),
+  },
+  {
+    path: 'mot-de-passe-oublie',
+    loadComponent: () => import('./features/forgot-password/forgot-password').then((m) => m.ForgotPassword),
+  },
+  {
+    path: 'reinitialiser-mot-de-passe',
+    loadComponent: () => import('./features/reset-password/reset-password').then((m) => m.ResetPassword),
+  },
+  {
     path: '',
     loadComponent: () => import('./layout/shell/shell').then((m) => m.Shell),
     canActivate: [authGuard],

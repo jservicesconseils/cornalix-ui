@@ -99,3 +99,89 @@
   color: var(--ink-faint);
   padding: 24px 0;
 }
+
+.consultant-card {
+  margin-top: 24px;
+}
+
+.card-header {
+  margin-bottom: 16px;
+
+  h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+}
+
+.card-subtitle {
+  color: var(--ink-soft);
+  font-size: 13px;
+  margin: 0;
+}
+
+.consultant-grant-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+
+  input {
+    flex: 1;
+  }
+}
+
+.consultant-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 4px;
+    border-top: 1px solid var(--line);
+
+    &:first-child {
+      border-top: none;
+    }
+  }
+}
+
+.invite-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-top: 10px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  input,
+  p-select {
+    width: 100%;
+  }
+}
+
+.invite-error {
+  color: var(--danger, #c0392b);
+  font-size: 12.5px;
+  margin-top: 10px;
+}
+
+@media (max-width: 560px) {
+  .consultant-grant-form {
+    flex-direction: column;
+  }
+}

@@ -12,6 +12,7 @@
   <span class="progress-label mono">{{ totalAnswered() }} / {{ totalQuestions() }} répondues</span>
 </div>
 
+<app-async-state [loading]="loading()" [error]="errorMessage()">
 <div class="questionnaire-grid">
   <nav class="category-list">
     @for (category of categoriesWithCounts(); track category.key) {
@@ -83,3 +84,4 @@
     </div>
   }
 </div>
+</app-async-state>

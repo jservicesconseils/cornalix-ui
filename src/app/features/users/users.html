@@ -3,7 +3,7 @@
     <h1>Utilisateurs</h1>
     <p class="page-subtitle">Gérez les accès de votre organisation.</p>
   </div>
-  <button type="button" class="btn-primary">
+  <button type="button" class="btn-primary" (click)="openInviteDialog()">
     <i class="pi pi-plus"></i>
     Inviter un utilisateur
   </button>
@@ -66,8 +66,8 @@
           }
         </td>
         <td>
-          <button type="button" class="icon-btn-flat" aria-label="Plus d'options">
-            <i class="pi pi-ellipsis-v"></i>
+          <button type="button" class="icon-btn-flat" aria-label="Retirer l'accès" (click)="removeMember(member)">
+            <i class="pi pi-trash"></i>
           </button>
         </td>
       </tr>
@@ -79,3 +79,94 @@
     </ng-template>
   </p-table>
 </div>
+
+<div class="card consultant-card">
+  <div class="card-header">
+    <h2>Accès consultants</h2>
+    <p class="card-subtitle">
+      Donnez accès à un consultant cybersécurité déjà inscrit -- révocable en tout temps, sans affecter ses autres
+      mandats.
+    </p>
+  </div>
+
+  <form class="consultant-grant-form" (ngSubmit)="grantConsultantAccess()">
+    <input
+      pInputText
+      type="email"
+      placeholder="Courriel du consultant..."
+      [ngModel]="consultantEmail()"
+      (ngModelChange)="consultantEmail.set($event)"
+      name="consultantEmail"
+      required
+    />
+    <button type="submit" class="btn-primary" [disabled]="consultantSubmitting()">
+      {{ consultantSubmitting() ? '...' : 'Donner accès' }}
+    </button>
+  </form>
+
+  @if (consultantError()) {
+    <p class="invite-error" role="alert">{{ consultantError() }}</p>
+  }
+
+  @if (consultantAccesses().length > 0) {
+    <ul class="consultant-list">
+      @for (access of consultantAccesses(); track access.id) {
+        <li>
+          <span class="mono">{{ access.consultantEmail }}</span>
+          <button
+            type="button"
+            class="icon-btn-flat"
+            aria-label="Retirer l'accès"
+            (click)="revokeConsultantAccess(access)"
+          >
+            <i class="pi pi-trash"></i>
+          </button>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="empty-cell">Aucun consultant n'a accès à cette organisation.</p>
+  }
+</div>
+
+<p-dialog
+  header="Inviter un utilisateur"
+  [(visible)]="inviteDialogVisible"
+  [modal]="true"
+  [style]="{ width: '420px' }"
+>
+  <div class="invite-form">
+    <label for="invite-name">Nom</label>
+    <input id="invite-name" pInputText type="text" [ngModel]="inviteName()" (ngModelChange)="inviteName.set($event)" />
+
+    <label for="invite-email">Courriel</label>
+    <input
+      id="invite-email"
+      pInputText
+      type="email"
+      [ngModel]="inviteEmail()"
+      (ngModelChange)="inviteEmail.set($event)"
+    />
+
+    <label for="invite-role">Rôle</label>
+    <p-select
+      id="invite-role"
+      [options]="inviteRoleOptions"
+      optionLabel="label"
+      optionValue="value"
+      [ngModel]="inviteRole()"
+      (ngModelChange)="inviteRole.set($event)"
+    />
+
+    @if (inviteError()) {
+      <p class="invite-error" role="alert">{{ inviteError() }}</p>
+    }
+  </div>
+
+  <ng-template #footer>
+    <button type="button" class="btn-secondary" (click)="inviteDialogVisible.set(false)">Annuler</button>
+    <button type="button" class="btn-primary" [disabled]="inviteSubmitting()" (click)="submitInvite()">
+      {{ inviteSubmitting() ? 'Envoi...' : 'Envoyer l\'invitation' }}
+    </button>
+  </ng-template>
+</p-dialog>

@@ -6,10 +6,12 @@ import { DiagnosticApiService } from '../../core/diagnostic/diagnostic-api.servi
 import { AnswerValue, Question } from '../../core/models/question.model';
 import { NistFunctionKey } from '../../core/models/organization.model';
 import { tenantFeature } from '../../core/state/tenant/tenant.reducer';
+import { AsyncState } from '../../shared/async-state/async-state';
+import { toErrorMessage } from '../../shared/async-state/http-error.util';
 
 @Component({
   selector: 'app-questionnaire',
-  imports: [],
+  imports: [AsyncState],
   templateUrl: './questionnaire.html',
   styleUrl: './questionnaire.scss',
 })
@@ -22,6 +24,7 @@ export class Questionnaire {
   protected readonly categories = QUESTION_CATEGORIES;
   protected readonly questions = signal<Question[]>([]);
   protected readonly loading = signal(true);
+  protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly selectedCategoryKey = signal<NistFunctionKey>(QUESTION_CATEGORIES[0].key);
   protected readonly selectedIndex = signal(0);
@@ -38,6 +41,7 @@ export class Questionnaire {
       }
 
       this.loading.set(true);
+      this.errorMessage.set(null);
       this.diagnosticApi
         .listQuestionsWithAnswers(organizationId)
         .then((questions) => {
@@ -45,6 +49,7 @@ export class Questionnaire {
           this.selectedCategoryKey.set(QUESTION_CATEGORIES[0].key);
           this.selectedIndex.set(0);
         })
+        .catch((error) => this.errorMessage.set(toErrorMessage(error)))
         .finally(() => this.loading.set(false));
     });
   }

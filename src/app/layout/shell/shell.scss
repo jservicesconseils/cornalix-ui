@@ -177,3 +177,72 @@
   overflow-y: auto;
   padding: 32px 40px;
 }
+
+.hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--surface-alt);
+  }
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+// SCRUM-52 : sous ce seuil, la sidebar (240px fixes) n'a plus sa place a
+// cote du contenu -- elle devient un tiroir hors-canevas ouvert via le
+// bouton hamburger du topbar, au-dessus d'un voile qui la referme au clic.
+@media (max-width: 860px) {
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 30;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: 4px 0 24px -8px rgba(16, 24, 40, 0.3);
+
+    &--open {
+      transform: translateX(0);
+    }
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: rgba(16, 24, 40, 0.45);
+  }
+
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .topbar {
+    padding: 14px 20px;
+  }
+
+  .org-switch {
+    min-width: 0;
+    flex-grow: 1;
+  }
+
+  .user-menu-text {
+    display: none;
+  }
+
+  .content {
+    padding: 20px;
+  }
+}

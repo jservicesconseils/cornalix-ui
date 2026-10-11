@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,16 +19,16 @@ interface NavItem {
   icon: string;
   route: string;
   roles?: UserRole[];
-  disabled?: boolean;
 }
 
+// "Parametres" retire (SCRUM-53) : lien mort (disabled, sans route
+// enregistree) visible en permanence sans aucun ecran derriere.
 const NAV_ITEMS: NavItem[] = [
   { label: 'nav.dashboard', icon: 'pi pi-home', route: '/tableau-de-bord' },
   { label: 'nav.portfolio', icon: 'pi pi-briefcase', route: '/portefeuille', roles: ['CONSULTANT'] },
   { label: 'nav.questionnaire', icon: 'pi pi-list-check', route: '/questionnaire' },
   { label: 'nav.reports', icon: 'pi pi-chart-bar', route: '/rapports' },
   { label: 'nav.users', icon: 'pi pi-users', route: '/utilisateurs', roles: ['ADMIN_PME', 'CONSULTANT'] },
-  { label: 'nav.settings', icon: 'pi pi-cog', route: '/parametres', disabled: true },
 ];
 
 @Component({
@@ -53,6 +53,19 @@ export class Shell {
     const role = this.user()?.role;
     return NAV_ITEMS.filter((item) => !item.roles || (role && item.roles.includes(role)));
   });
+
+  // SCRUM-52 : sidebar fixe (240px) sans place sur mobile/tablette --
+  // devient un tiroir hors-canevas sous le seuil defini dans shell.scss,
+  // ouvert/ferme via ce signal (bouton hamburger + clic sur le voile).
+  protected readonly mobileNavOpen = signal(false);
+
+  protected toggleMobileNav(): void {
+    this.mobileNavOpen.update((open) => !open);
+  }
+
+  protected closeMobileNav(): void {
+    this.mobileNavOpen.set(false);
+  }
 
   protected readonly userMenuItems: MenuItem[] = [
     {

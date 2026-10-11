@@ -3,6 +3,10 @@ export interface CognitoIdTokenClaims {
   email?: string;
   tenant_id?: string;
   tenant_scope?: string;
+  // Emis par le trigger Pre Token Generation a partir de custom:role
+  // (SCRUM-40) -- absent sur un jeton emis avant ce ticket, ou si
+  // custom:role n'a jamais ete rempli pour cet utilisateur.
+  role?: string;
   exp: number;
   [key: string]: unknown;
 }

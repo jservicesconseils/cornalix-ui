@@ -39,6 +39,40 @@
   gap: 6px;
 }
 
+// SCRUM-52 : la colonne de categories (280px fixes) est le premier a
+// casser sous les 860px -- elle passe au-dessus du questionnaire en
+// bandeau scrollable horizontalement plutot que de rester a cote.
+@media (max-width: 860px) {
+  .questionnaire-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-list {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .category-item {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .answer-options {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .answer-pill {
+    justify-content: center;
+  }
+
+  .question-text {
+    font-size: 17px;
+  }
+}
+
 .category-item {
   display: flex;
   align-items: center;
