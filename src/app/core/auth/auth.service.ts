@@ -165,6 +165,16 @@ export class AuthService {
       if (error instanceof ExpiredCodeException) {
         throw new ConfirmSignUpFailedError('Ce code a expiré -- demandez-en un nouveau.');
       }
+      // Cognito renvoie NotAuthorizedException ("Current status is
+      // CONFIRMED") si le compte est deja confirme -- un double-clic sur
+      // "Confirmer", un onglet reste ouvert apres une confirmation deja
+      // reussie, ou une nouvelle tentative d'inscription sur un courriel
+      // deja confirme. Retenter ne peut alors jamais reussir (le compte
+      // restera "deja confirme"), donc on traite ca comme un succes
+      // plutot qu'une erreur qui pousserait a reessayer indefiniment.
+      if (error instanceof NotAuthorizedException && error.message?.includes('Current status is CONFIRMED')) {
+        return;
+      }
       throw new ConfirmSignUpFailedError('La confirmation a échoué. Réessayez dans un instant.');
     }
   }
