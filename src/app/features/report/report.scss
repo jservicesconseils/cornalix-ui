@@ -4,6 +4,13 @@
   flex-shrink: 0;
 }
 
+// SCRUM-48 : titre dedie a l'impression -- le .page-header normal reste
+// cache (voir @media print plus bas) car ses boutons Exporter/Partager
+// n'ont pas leur place sur le document imprime.
+.print-heading {
+  display: none;
+}
+
 .overview-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -157,5 +164,48 @@
 
   .header-actions {
     flex-wrap: wrap;
+  }
+}
+
+// SCRUM-48 : "Exporter (PDF)" declenche window.print() (report.ts) --
+// p-tabpanel ne masque les onglets inactifs qu'avec l'attribut natif
+// [hidden] (voir PrimeNG Tabs), donc le document imprime montre les
+// quatre onglets l'un sous l'autre au lieu du seul onglet actif.
+@media print {
+  .page-header,
+  p-tablist,
+  .see-all {
+    display: none !important;
+  }
+
+  .print-heading {
+    display: block;
+    margin-bottom: 16px;
+
+    h1 {
+      font-size: 22px;
+    }
+
+    p {
+      color: var(--ink-soft);
+      font-size: 13px;
+      margin: 4px 0 0;
+    }
+  }
+
+  p-tabpanel[hidden] {
+    display: block !important;
+  }
+
+  p-tabpanel {
+    display: block !important;
+    break-inside: avoid;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
   }
 }
