@@ -37,6 +37,9 @@
 
       <p class="question-text">{{ question.text }}</p>
       <p class="question-reference mono">Référence : {{ question.cisReference }}</p>
+      @if (question.answeredAt) {
+        <p class="question-last-modified mono">Dernière modification : {{ formatLastModified(question.answeredAt) }}</p>
+      }
 
       <div class="answer-options">
         <button

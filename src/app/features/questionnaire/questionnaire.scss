@@ -148,6 +148,13 @@
   margin: -8px 0 0;
 }
 
+// SCRUM-51
+.question-last-modified {
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin: -8px 0 0;
+}
+
 .answer-options {
   display: flex;
   flex-wrap: wrap;
