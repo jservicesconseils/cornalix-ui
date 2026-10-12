@@ -13,6 +13,12 @@
 </div>
 
 <app-async-state [loading]="loading()" [error]="errorMessage()">
+@if (!hasOrganization()) {
+  <p class="empty-state">
+    Vous n'avez accès à aucune organisation pour l'instant. Demandez à une organisation cliente de vous donner accès
+    depuis son écran Utilisateurs.
+  </p>
+} @else {
 <div class="questionnaire-grid">
   <nav class="category-list">
     @for (category of categoriesWithCounts(); track category.key) {
@@ -87,4 +93,5 @@
     </div>
   }
 </div>
+}
 </app-async-state>

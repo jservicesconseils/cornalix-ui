@@ -3,10 +3,12 @@
     <h1>Utilisateurs</h1>
     <p class="page-subtitle">Gérez les accès de votre organisation.</p>
   </div>
-  <button type="button" class="btn-primary" (click)="openInviteDialog()">
-    <i class="pi pi-plus"></i>
-    Inviter un utilisateur
-  </button>
+  @if (isAdmin()) {
+    <button type="button" class="btn-primary" (click)="openInviteDialog()">
+      <i class="pi pi-plus"></i>
+      Inviter un utilisateur
+    </button>
+  }
 </div>
 
 <div class="filter-row">
@@ -43,7 +45,9 @@
         <th>Rôle</th>
         <th>Courriel</th>
         <th>Statut</th>
-        <th style="width: 48px"></th>
+        @if (isAdmin()) {
+          <th style="width: 48px"></th>
+        }
       </tr>
     </ng-template>
     <ng-template #body let-member>
@@ -65,21 +69,24 @@
             <span class="badge badge--partial">En attente</span>
           }
         </td>
-        <td>
-          <button type="button" class="icon-btn-flat" aria-label="Retirer l'accès" (click)="removeMember(member)">
-            <i class="pi pi-trash"></i>
-          </button>
-        </td>
+        @if (isAdmin()) {
+          <td>
+            <button type="button" class="icon-btn-flat" aria-label="Retirer l'accès" (click)="removeMember(member)">
+              <i class="pi pi-trash"></i>
+            </button>
+          </td>
+        }
       </tr>
     </ng-template>
     <ng-template #emptymessage>
       <tr>
-        <td colspan="5" class="empty-cell">Aucun utilisateur ne correspond à votre recherche.</td>
+        <td [attr.colspan]="isAdmin() ? 5 : 4" class="empty-cell">Aucun utilisateur ne correspond à votre recherche.</td>
       </tr>
     </ng-template>
   </p-table>
 </div>
 
+@if (isAdmin()) {
 <div class="card consultant-card">
   <div class="card-header">
     <h2>Accès consultants</h2>
@@ -128,6 +135,7 @@
     <p class="empty-cell">Aucun consultant n'a accès à cette organisation.</p>
   }
 </div>
+}
 
 <p-dialog
   header="Inviter un utilisateur"

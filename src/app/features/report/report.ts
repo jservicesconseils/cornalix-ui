@@ -55,10 +55,24 @@ export class Report {
     this.overallScore() === null ? '—' : `${this.overallScore()}%`,
   );
 
+  // Vrai des qu'il n'y a aucune organisation courante -- cas reel d'un
+  // Consultant fraichement inscrit, avant qu'aucune organisation cliente
+  // ne lui ait donne acces (portefeuille vide, SCRUM-41/45).
+  protected readonly hasOrganization = computed(() => this.currentOrganizationId() !== null);
+
+  // Rien a exporter sans organisation, ni avant que le rapport ait fini
+  // de charger -- le bouton "Exporter (PDF)" n'a pas sa place tant qu'il
+  // n'y a rien a imprimer.
+  protected readonly hasData = computed(() => this.hasOrganization() && !this.loading() && !this.errorMessage());
+
   constructor() {
     effect(() => {
       const organizationId = this.currentOrganizationId();
       if (!organizationId) {
+        // Bug corrige : loading demarrait a true et rien ne le remettait
+        // jamais a false dans ce cas, spinner infini au lieu de l'etat
+        // vide gere par le gabarit (hasOrganization()).
+        this.loading.set(false);
         return;
       }
 

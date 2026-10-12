@@ -12,6 +12,12 @@
 </div>
 
 <app-async-state [loading]="loading()" [error]="errorMessage()">
+@if (!hasOrganization()) {
+  <p class="empty-state">
+    Vous n'avez accès à aucune organisation pour l'instant. Demandez à une organisation cliente de vous donner accès
+    depuis son écran Utilisateurs.
+  </p>
+} @else {
 <div class="stat-grid">
   <div class="card stat-card">
     <div class="score-ring" [style.--pct]="overallScorePct()"></div>
@@ -190,4 +196,5 @@
     </div>
   </div>
 </div>
+}
 </app-async-state>
