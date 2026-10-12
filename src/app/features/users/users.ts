@@ -9,7 +9,11 @@ import { Select } from 'primeng/select';
 
 import { OrgMember, ROLE_LABELS, UserRole } from '../../core/models/user.model';
 import { UserApiService } from '../../core/user/user-api.service';
-import { ConsultantAccess, ConsultantAccessApiService } from '../../core/consultant/consultant-access-api.service';
+import {
+  ConsultantAccess,
+  ConsultantAccessApiService,
+  ConsultantAccessStatus,
+} from '../../core/consultant/consultant-access-api.service';
 import { authFeature } from '../../core/state/auth/auth.reducer';
 import { tenantFeature } from '../../core/state/tenant/tenant.reducer';
 
@@ -174,11 +178,37 @@ export class Users {
     if (!organizationId) {
       return;
     }
-    if (!confirm(`Retirer l'accès de ${access.consultantEmail} ?`)) {
+    const prompt =
+      access.status === 'PENDING'
+        ? `Annuler l'invitation de ${access.consultantEmail} ?`
+        : `Retirer l'accès de ${access.consultantEmail} ?`;
+    if (!confirm(prompt)) {
       return;
     }
 
     await this.consultantAccessApi.revoke(organizationId, access.id);
     this.consultantAccesses.update((current) => current.filter((a) => a.id !== access.id));
+  }
+
+  protected consultantStatusLabel(status: ConsultantAccessStatus): string {
+    switch (status) {
+      case 'PENDING':
+        return 'En attente';
+      case 'ACCEPTED':
+        return 'Actif';
+      case 'DECLINED':
+        return 'Refusée';
+    }
+  }
+
+  protected consultantStatusBadgeClass(status: ConsultantAccessStatus): string {
+    switch (status) {
+      case 'PENDING':
+        return 'badge--partial';
+      case 'ACCEPTED':
+        return 'badge--yes';
+      case 'DECLINED':
+        return 'badge--no';
+    }
   }
 }

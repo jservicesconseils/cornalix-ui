@@ -1,0 +1,66 @@
+<div class="page-header">
+  <div>
+    <h1>Invitations</h1>
+    <p class="page-subtitle">
+      Organisations qui vous ont donné accès en tant que consultant.
+      @if (pendingCount() > 0) {
+        · <span class="mono">{{ pendingCount() }}</span> en attente
+      }
+    </p>
+  </div>
+</div>
+
+@if (loadError()) {
+  <p class="invite-error" role="alert">{{ loadError() }}</p>
+}
+
+<div class="card">
+  <p-table [value]="invitations()" dataKey="id" [rowHover]="true" [loading]="loading()">
+    <ng-template #header>
+      <tr>
+        <th>Date</th>
+        <th>PME</th>
+        <th>Envoyée par</th>
+        <th>Statut</th>
+        <th style="width: 200px"></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-invitation>
+      <tr>
+        <td class="mono">{{ formatDate(invitation.invitedAt) }}</td>
+        <td>{{ invitation.organizationName }}</td>
+        <td>{{ invitation.invitedByName ?? '—' }}</td>
+        <td>
+          <span class="badge" [class]="statusBadgeClass(invitation.status)">{{ statusLabel(invitation.status) }}</span>
+        </td>
+        <td>
+          @if (invitation.status === 'PENDING') {
+            <div class="invitation-actions">
+              <button
+                type="button"
+                class="btn-accept"
+                [disabled]="respondingIds().has(invitation.id)"
+                (click)="accept(invitation)"
+              >
+                Accepter
+              </button>
+              <button
+                type="button"
+                class="btn-decline"
+                [disabled]="respondingIds().has(invitation.id)"
+                (click)="decline(invitation)"
+              >
+                Refuser
+              </button>
+            </div>
+          }
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="5" class="empty-cell">Aucune invitation pour le moment.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

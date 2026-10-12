@@ -31,6 +31,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'nav.questionnaire', icon: 'pi pi-list-check', route: '/questionnaire' },
   { label: 'nav.reports', icon: 'pi pi-chart-bar', route: '/reports' },
   { label: 'nav.users', icon: 'pi pi-users', route: '/users', roles: ['ADMIN_PME', 'CONSULTANT'] },
+  { label: 'nav.invitations', icon: 'pi pi-envelope', route: '/invitations', roles: ['CONSULTANT'] },
   { label: 'nav.settings', icon: 'pi pi-cog', route: '/settings/questions' },
 ];
 

@@ -51,6 +51,13 @@ export const routes: Routes = [
         loadComponent: () => import('./features/users/users').then((m) => m.Users),
       },
       {
+        // Invitations recues par un Consultant (acces a une organisation
+        // cliente, a accepter/refuser) -- lien envoye par courriel au
+        // consultant pointe directement vers cette route.
+        path: 'invitations',
+        loadComponent: () => import('./features/invitations/invitations').then((m) => m.Invitations),
+      },
+      {
         // Ecran d'administration du catalogue de questions -- disponible
         // a tout le monde pour l'instant (tests), sera restreint au role
         // OWNER plus tard.

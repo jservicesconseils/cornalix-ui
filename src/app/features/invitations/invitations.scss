@@ -1,0 +1,57 @@
+.invite-error {
+  color: var(--danger, #c0392b);
+  font-size: 12.5px;
+  margin-bottom: 14px;
+}
+
+.empty-cell {
+  text-align: center;
+  color: var(--ink-faint);
+  padding: 24px 0;
+}
+
+.invitation-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-accept {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--yes);
+  background: var(--yes-soft);
+  color: var(--yes);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--yes);
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-decline {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--surface-alt);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

@@ -152,6 +152,12 @@
   }
 }
 
+.consultant-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .invite-form {
   display: flex;
   flex-direction: column;
