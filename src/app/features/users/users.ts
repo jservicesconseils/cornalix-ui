@@ -10,6 +10,7 @@ import { Select } from 'primeng/select';
 import { OrgMember, ROLE_LABELS, UserRole } from '../../core/models/user.model';
 import { UserApiService } from '../../core/user/user-api.service';
 import { ConsultantAccess, ConsultantAccessApiService } from '../../core/consultant/consultant-access-api.service';
+import { authFeature } from '../../core/state/auth/auth.reducer';
 import { tenantFeature } from '../../core/state/tenant/tenant.reducer';
 
 type RoleFilter = 'ALL' | UserRole;
@@ -33,6 +34,14 @@ export class Users {
   private readonly consultantAccessApi = inject(ConsultantAccessApiService);
 
   private readonly currentOrganizationId = this.store.selectSignal(tenantFeature.selectCurrentOrganizationId);
+  private readonly user = this.store.selectSignal(authFeature.selectUser);
+
+  // Inviter/retirer un membre ou gerer l'acces consultant exige deja le
+  // role ADMIN_PME cote backend (UserController/ConsultantAccessController,
+  // 403 sinon) -- cache ces controles plutot que de laisser un Consultant
+  // (qui garde un acces en LECTURE a la liste des membres d'une
+  // organisation cliente) cliquer sur des boutons qui echoueraient.
+  protected readonly isAdmin = computed(() => this.user()?.role === 'ADMIN_PME');
 
   protected readonly members = signal<OrgMember[]>([]);
 

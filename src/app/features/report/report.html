@@ -8,10 +8,12 @@
       }
     </p>
   </div>
-  <div class="header-actions">
-    <button type="button" class="btn-secondary" (click)="exportPdf()"><i class="pi pi-download"></i> Exporter (PDF)</button>
-    <button type="button" class="btn-primary"><i class="pi pi-share-alt"></i> Partager</button>
-  </div>
+  @if (hasData()) {
+    <div class="header-actions">
+      <button type="button" class="btn-secondary" (click)="exportPdf()"><i class="pi pi-download"></i> Exporter (PDF)</button>
+      <button type="button" class="btn-primary"><i class="pi pi-share-alt"></i> Partager</button>
+    </div>
+  }
 </div>
 
 <div class="print-heading">
@@ -22,6 +24,12 @@
 </div>
 
 <app-async-state [loading]="loading()" [error]="errorMessage()">
+@if (!hasOrganization()) {
+  <p class="empty-state">
+    Vous n'avez accès à aucune organisation pour l'instant. Demandez à une organisation cliente de vous donner accès
+    depuis son écran Utilisateurs.
+  </p>
+} @else {
 <p-tabs value="overview">
   <p-tablist>
     <p-tab value="overview">Vue d'ensemble</p-tab>
@@ -139,4 +147,5 @@
     </p-tabpanel>
   </p-tabpanels>
 </p-tabs>
+}
 </app-async-state>
