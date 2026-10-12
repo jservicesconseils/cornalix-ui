@@ -4,11 +4,15 @@ import { firstValueFrom } from 'rxjs';
 
 import { API_BASE_URLS } from '../data/api-config';
 
+export type ConsultantAccessStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED';
+
 export interface ConsultantAccess {
   id: string;
   organizationId: string;
   consultantEmail: string;
+  status: ConsultantAccessStatus;
   grantedAt: string;
+  respondedAt: string | null;
 }
 
 // Octroi/retrait d'acces d'un consultant a l'organisation courante

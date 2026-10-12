@@ -128,11 +128,14 @@
     <ul class="consultant-list">
       @for (access of consultantAccesses(); track access.id) {
         <li>
-          <span class="mono">{{ access.consultantEmail }}</span>
+          <span class="consultant-identity">
+            <span class="mono">{{ access.consultantEmail }}</span>
+            <span class="badge" [class]="consultantStatusBadgeClass(access.status)">{{ consultantStatusLabel(access.status) }}</span>
+          </span>
           <button
             type="button"
             class="icon-btn-flat"
-            aria-label="Retirer l'accès"
+            [attr.aria-label]="access.status === 'PENDING' ? 'Annuler l\'invitation' : 'Retirer l\'accès'"
             (click)="revokeConsultantAccess(access)"
           >
             <i class="pi pi-trash"></i>
