@@ -54,7 +54,7 @@
         <i class="pi pi-bars"></i>
       </button>
 
-      @if (portfolio().length > 0) {
+      @if (isConsultant() && portfolio().length > 0) {
         <p-select
           class="org-switch"
           [options]="portfolio()"

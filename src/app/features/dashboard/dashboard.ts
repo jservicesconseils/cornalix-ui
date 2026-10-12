@@ -7,7 +7,9 @@ import { CIS_CONTROL_LABELS } from '../../core/data/cis-control-labels';
 import { QUESTION_CATEGORIES } from '../../core/data/question-categories';
 import { DiagnosticApiService } from '../../core/diagnostic/diagnostic-api.service';
 import { CisControlScore, NistFunctionScore } from '../../core/models/organization.model';
+import { ROLE_LABELS } from '../../core/models/user.model';
 import { ScoringApiService } from '../../core/scoring/scoring-api.service';
+import { authFeature } from '../../core/state/auth/auth.reducer';
 import { tenantFeature } from '../../core/state/tenant/tenant.reducer';
 import { RadarChart } from '../../shared/radar-chart/radar-chart';
 import { TrendChart, TrendPoint } from '../../shared/trend-chart/trend-chart';
@@ -26,6 +28,9 @@ export class Dashboard {
   private readonly diagnosticApi = inject(DiagnosticApiService);
 
   private readonly currentOrganizationId = this.store.selectSignal(tenantFeature.selectCurrentOrganizationId);
+  private readonly user = this.store.selectSignal(authFeature.selectUser);
+
+  protected readonly roleLabel = computed(() => (this.user() ? ROLE_LABELS[this.user()!.role] : ''));
 
   // Nombre total de fonctions NIST CSF 2.0 -- fait structurel du
   // referentiel, pas une donnee a charger.
