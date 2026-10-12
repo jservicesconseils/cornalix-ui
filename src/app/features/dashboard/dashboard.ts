@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { LucideRefreshCw, LucideCheck, LucideArrowRight, LucideFlag } from '@lucide/angular';
+import { LucideRefreshCw, LucideArrowRight, LucideFlag } from '@lucide/angular';
 
 import { CIS_CONTROL_LABELS } from '../../core/data/cis-control-labels';
 import { QUESTION_CATEGORIES } from '../../core/data/question-categories';
@@ -18,7 +18,7 @@ import { toErrorMessage } from '../../shared/async-state/http-error.util';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, RadarChart, TrendChart, LucideRefreshCw, LucideCheck, LucideArrowRight, LucideFlag, AsyncState],
+  imports: [RouterLink, RadarChart, TrendChart, LucideRefreshCw, LucideArrowRight, LucideFlag, AsyncState],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

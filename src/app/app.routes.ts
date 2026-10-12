@@ -1,25 +1,27 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
 
+// Chemins d'URL en anglais (demande explicite) -- distinct des libelles
+// affiches (navigation, titres), qui restent traduits via ngx-translate.
 export const routes: Routes = [
   {
-    path: 'connexion',
+    path: 'login',
     loadComponent: () => import('./features/login/login').then((m) => m.Login),
   },
   {
-    path: 'inscription',
+    path: 'signup',
     loadComponent: () => import('./features/signup/signup').then((m) => m.Signup),
   },
   {
-    path: 'confirmer-inscription',
+    path: 'confirm-signup',
     loadComponent: () => import('./features/confirm-signup/confirm-signup').then((m) => m.ConfirmSignup),
   },
   {
-    path: 'mot-de-passe-oublie',
+    path: 'forgot-password',
     loadComponent: () => import('./features/forgot-password/forgot-password').then((m) => m.ForgotPassword),
   },
   {
-    path: 'reinitialiser-mot-de-passe',
+    path: 'reset-password',
     loadComponent: () => import('./features/reset-password/reset-password').then((m) => m.ResetPassword),
   },
   {
@@ -27,13 +29,13 @@ export const routes: Routes = [
     loadComponent: () => import('./layout/shell/shell').then((m) => m.Shell),
     canActivate: [authGuard],
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'tableau-de-bord' },
+      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
-        path: 'tableau-de-bord',
+        path: 'dashboard',
         loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
       },
       {
-        path: 'portefeuille',
+        path: 'portfolio',
         loadComponent: () => import('./features/portfolio/portfolio').then((m) => m.Portfolio),
       },
       {
@@ -41,14 +43,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/questionnaire/questionnaire').then((m) => m.Questionnaire),
       },
       {
-        path: 'rapports',
+        path: 'reports',
         loadComponent: () => import('./features/report/report').then((m) => m.Report),
       },
       {
-        path: 'utilisateurs',
+        path: 'users',
         loadComponent: () => import('./features/users/users').then((m) => m.Users),
       },
     ],
   },
-  { path: '**', redirectTo: 'connexion' },
+  { path: '**', redirectTo: 'login' },
 ];
