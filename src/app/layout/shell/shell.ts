@@ -49,6 +49,13 @@ export class Shell {
 
   protected readonly roleLabel = computed(() => (this.user() ? ROLE_LABELS[this.user()!.role] : ''));
 
+  // Le selecteur d'organisation n'a de sens que pour un Consultant
+  // (portefeuille de plusieurs organisations clientes) -- un compte PME
+  // n'a jamais qu'une seule organisation, donc portfolio().length > 0
+  // seul (sans ce filtre par role) l'affichait aussi inutilement pour
+  // eux.
+  protected readonly isConsultant = computed(() => this.user()?.role === 'CONSULTANT');
+
   protected readonly navItems = computed(() => {
     const role = this.user()?.role;
     return NAV_ITEMS.filter((item) => !item.roles || (role && item.roles.includes(role)));
