@@ -26,6 +26,77 @@
   flex-wrap: wrap;
 }
 
+// Input natif cache -- impossible a styliser correctement d'un
+// navigateur a l'autre, on pilote son clic via le <label for="...">
+// visible a la place (.btn-choose-file ci-dessous).
+.file-input-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.btn-choose-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface-alt);
+  }
+
+  i {
+    font-size: 13px;
+  }
+}
+
+.file-name {
+  color: var(--ink-faint);
+  font-size: 12.5px;
+  font-family: var(--font-mono);
+}
+
+// Rouge attenue (meme token que .badge--no) plutot qu'un rouge plein :
+// l'import peut ecraser des questions existantes (upsert), une couleur
+// d'avertissement est justifiee sans pour autant le faire ressembler a
+// un bouton de suppression immediate.
+.btn-import {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--no);
+  background: var(--no-soft);
+  color: var(--no);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--no);
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  i {
+    font-size: 13px;
+  }
+}
+
 .import-result {
   display: flex;
   gap: 8px;
