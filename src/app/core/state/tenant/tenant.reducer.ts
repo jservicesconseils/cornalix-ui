@@ -1,5 +1,6 @@
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 import { Organization } from '../../models/organization.model';
+import { AuthActions } from '../auth/auth.actions';
 import { TenantActions } from './tenant.actions';
 
 export interface TenantState {
@@ -25,6 +26,13 @@ export const tenantFeature = createFeature({
       ...state,
       currentOrganizationId: organizationId,
     })),
+    // Bug decouvert pendant les tests manuels : sans reset explicite ici,
+    // currentOrganizationId d'un compte precedent survivait a la
+    // deconnexion (setPortfolio ne l'ecrase que s'il est deja nul). Un
+    // nouveau compte connecte dans le meme onglet (sans rechargement
+    // complet) heritait alors d'un id d'organisation hors de son propre
+    // tenant_scope -- selecteur d'organisation vide + 403 partout.
+    on(AuthActions.logout, (): TenantState => initialState),
   ),
   extraSelectors: ({ selectPortfolio, selectCurrentOrganizationId }) => ({
     selectCurrentOrganization: createSelector(
