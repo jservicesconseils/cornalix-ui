@@ -22,8 +22,16 @@
   </div>
 
   <div class="import-row">
-    <input type="file" accept=".csv" (change)="onFileSelected($event)" />
-    <button type="button" class="btn-secondary" [disabled]="!selectedFileName() || importing()" (click)="importSelectedFile()">
+    <input type="file" id="csv-file-input" class="file-input-hidden" accept=".csv" (change)="onFileSelected($event)" />
+    <label for="csv-file-input" class="btn-choose-file">
+      <i class="pi pi-upload"></i>
+      Choisir un fichier
+    </label>
+    <span class="file-name">{{ selectedFileName() ?? 'Aucun fichier sélectionné' }}</span>
+    <button type="button" class="btn-import" [disabled]="!selectedFileName() || importing()" (click)="importSelectedFile()">
+      @if (importing()) {
+        <i class="pi pi-spinner pi-spin"></i>
+      }
       {{ importing() ? 'Import en cours...' : 'Importer' }}
     </button>
   </div>
