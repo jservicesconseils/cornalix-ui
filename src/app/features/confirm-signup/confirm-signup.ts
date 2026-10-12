@@ -46,7 +46,7 @@ export class ConfirmSignup {
           this.pending.organizationLocation,
         );
         this.registrationFlow.clear();
-        this.router.navigate(['/tableau-de-bord']);
+        this.router.navigate(['/dashboard']);
       } else {
         await this.authService.completeConsultantRegistration(this.pending.email, this.pending.password);
         this.registrationFlow.clear();
@@ -54,7 +54,7 @@ export class ConfirmSignup {
         // peut encore y ajouter ce consultant) -- l'ecran Portefeuille
         // gere deja ce cas plutot que le Tableau de bord, qui a besoin
         // d'une organisation courante pour afficher quoi que ce soit.
-        this.router.navigate(['/portefeuille']);
+        this.router.navigate(['/portfolio']);
       }
     } catch (error) {
       this.errorMessage.set(
@@ -77,7 +77,7 @@ export class ConfirmSignup {
   }
 
   private redirectToSignup(): null {
-    this.router.navigate(['/inscription']);
+    this.router.navigate(['/signup']);
     return null;
   }
 }

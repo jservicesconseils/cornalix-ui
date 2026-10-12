@@ -120,7 +120,7 @@
           />
           {{ 'login.rememberMe' | translate }}
         </label>
-        <a routerLink="/mot-de-passe-oublie" class="forgot-link">{{ 'login.forgotPassword' | translate }}</a>
+        <a routerLink="/forgot-password" class="forgot-link">{{ 'login.forgotPassword' | translate }}</a>
       </div>
 
       @if (errorMessage(); as error) {
@@ -136,7 +136,7 @@
 
       <p class="no-account">
         {{ 'login.noAccount' | translate }}
-        <a routerLink="/inscription">{{ 'login.createAccount' | translate }}</a>
+        <a routerLink="/signup">{{ 'login.createAccount' | translate }}</a>
       </p>
     </form>
   </div>

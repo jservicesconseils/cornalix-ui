@@ -37,7 +37,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       return from(authService.refresh()).pipe(
         switchMap((newToken) => {
           if (!newToken) {
-            router.navigate(['/connexion']);
+            router.navigate(['/login']);
             return throwError(() => error);
           }
           return next(withAuth(newToken));
