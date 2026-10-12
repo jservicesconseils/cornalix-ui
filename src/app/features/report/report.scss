@@ -70,9 +70,13 @@
   gap: 16px;
 }
 
+// Le libelle occupe ~3/4 de la ligne (3fr) -- avec une largeur fixe
+// (140px), les libelles des 18 controles CIS (souvent longs) se
+// faisaient couper beaucoup trop tot, alors que la barre de progression
+// n'a pas besoin de tout l'espace restant pour rester lisible.
 .bar-row {
   display: grid;
-  grid-template-columns: 140px 1fr 40px;
+  grid-template-columns: 3fr 1fr 40px;
   align-items: center;
   gap: 12px;
 }
@@ -158,7 +162,7 @@
   }
 
   .bar-row {
-    grid-template-columns: 100px 1fr 36px;
+    grid-template-columns: 3fr 1fr 36px;
     gap: 8px;
   }
 
