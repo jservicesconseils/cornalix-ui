@@ -36,6 +36,12 @@ export class Users {
   private readonly currentOrganizationId = this.store.selectSignal(tenantFeature.selectCurrentOrganizationId);
   private readonly user = this.store.selectSignal(authFeature.selectUser);
 
+  // Affiche quelle organisation est consultee -- important pour un
+  // Consultant qui bascule entre plusieurs organisations clientes via le
+  // selecteur de la barre du haut (sinon ambigu de savoir laquelle est
+  // affichee ici).
+  protected readonly currentOrganization = this.store.selectSignal(tenantFeature.selectCurrentOrganization);
+
   // Inviter/retirer un membre ou gerer l'acces consultant exige deja le
   // role ADMIN_PME cote backend (UserController/ConsultantAccessController,
   // 403 sinon) -- cache ces controles plutot que de laisser un Consultant
