@@ -1,0 +1,187 @@
+<div class="page-header">
+  <div>
+    <h1>Catalogue de questions</h1>
+    <p class="page-subtitle">
+      Gérez les questions du questionnaire (CIS Controls v8 × NIST CSF 2.0) -- modification, suppression et import en
+      masse.
+    </p>
+  </div>
+  <button type="button" class="btn-primary" (click)="openCreateDialog()">
+    <i class="pi pi-plus"></i>
+    Ajouter une question
+  </button>
+</div>
+
+<div class="card import-card">
+  <div class="card-header">
+    <h2>Import en masse (CSV)</h2>
+    <p class="card-subtitle">
+      Colonnes requises : cisControl, cisSafeguard, nistFunction, implementationGroup, text_fr (text_en optionnel).
+      Une question existante (même contrôle CIS + safeguard) est mise à jour, sinon elle est créée.
+    </p>
+  </div>
+
+  <div class="import-row">
+    <input type="file" accept=".csv" (change)="onFileSelected($event)" />
+    <button type="button" class="btn-secondary" [disabled]="!selectedFileName() || importing()" (click)="importSelectedFile()">
+      {{ importing() ? 'Import en cours...' : 'Importer' }}
+    </button>
+  </div>
+
+  @if (importError()) {
+    <p class="invite-error" role="alert">{{ importError() }}</p>
+  }
+
+  @if (importResult(); as result) {
+    <div class="import-result">
+      <span class="badge badge--yes">{{ result.created }} créée(s)</span>
+      <span class="badge badge--partial">{{ result.updated }} mise(s) à jour</span>
+      @if (result.errors.length > 0) {
+        <span class="badge badge--no">{{ result.errors.length }} erreur(s)</span>
+      }
+    </div>
+    @if (result.errors.length > 0) {
+      <ul class="import-errors">
+        @for (rowError of result.errors; track rowError.rowNumber) {
+          <li>Ligne {{ rowError.rowNumber }} : {{ rowError.message }}</li>
+        }
+      </ul>
+    }
+  }
+</div>
+
+<div class="filter-row">
+  <span class="search-input">
+    <i class="pi pi-search"></i>
+    <input
+      pInputText
+      type="text"
+      placeholder="Rechercher une question..."
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)"
+    />
+  </span>
+</div>
+
+@if (loadError()) {
+  <p class="invite-error" role="alert">{{ loadError() }}</p>
+}
+
+<div class="card">
+  <p-table [value]="filteredQuestions()" dataKey="id" [rowHover]="true" [loading]="loading()">
+    <ng-template #header>
+      <tr>
+        <th>CIS</th>
+        <th>Fonction NIST</th>
+        <th>IG</th>
+        <th>Texte (FR)</th>
+        <th style="width: 90px"></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-question>
+      <tr>
+        <td class="mono">CIS {{ question.cisControl }} — {{ question.cisSafeguard }}</td>
+        <td>{{ nistFunctionLabel(question.nistFunction) }}</td>
+        <td><span class="role-tag">{{ question.implementationGroup }}</span></td>
+        <td class="question-text">{{ questionText(question) }}</td>
+        <td>
+          <button type="button" class="icon-btn-flat" aria-label="Modifier" (click)="openEditDialog(question)">
+            <i class="pi pi-pencil"></i>
+          </button>
+          <button type="button" class="icon-btn-flat" aria-label="Supprimer" (click)="deleteQuestion(question)">
+            <i class="pi pi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="5" class="empty-cell">Aucune question ne correspond à votre recherche.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [header]="editingQuestion() ? 'Modifier la question' : 'Ajouter une question'"
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [style]="{ width: '520px' }"
+>
+  <div class="question-form">
+    <div class="form-row">
+      <div>
+        <label for="question-cis-control">Contrôle CIS (1-18)</label>
+        <p-inputnumber
+          id="question-cis-control"
+          [min]="1"
+          [max]="18"
+          [ngModel]="form().cisControl"
+          (ngModelChange)="updateForm({ cisControl: $event })"
+        />
+      </div>
+      <div>
+        <label for="question-cis-safeguard">Safeguard CIS</label>
+        <input
+          id="question-cis-safeguard"
+          pInputText
+          type="text"
+          placeholder="Ex. 1.1"
+          [ngModel]="form().cisSafeguard"
+          (ngModelChange)="updateForm({ cisSafeguard: $event })"
+        />
+      </div>
+    </div>
+
+    <label for="question-nist-function">Fonction NIST CSF</label>
+    <p-select
+      id="question-nist-function"
+      [options]="nistFunctionOptions"
+      optionLabel="label"
+      optionValue="key"
+      placeholder="Sélectionner..."
+      [ngModel]="form().nistFunction"
+      (ngModelChange)="updateForm({ nistFunction: $event })"
+    />
+
+    <label for="question-ig">Groupe d'implémentation</label>
+    <p-select
+      id="question-ig"
+      [options]="implementationGroupOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Sélectionner..."
+      [ngModel]="form().implementationGroup"
+      (ngModelChange)="updateForm({ implementationGroup: $event })"
+    />
+
+    <label for="question-text-fr">Texte (français)</label>
+    <textarea
+      id="question-text-fr"
+      pInputText
+      rows="3"
+      [ngModel]="form().textFr"
+      (ngModelChange)="updateForm({ textFr: $event })"
+    ></textarea>
+
+    <label for="question-text-en">Texte (anglais, optionnel)</label>
+    <textarea
+      id="question-text-en"
+      pInputText
+      rows="3"
+      [ngModel]="form().textEn"
+      (ngModelChange)="updateForm({ textEn: $event })"
+    ></textarea>
+
+    @if (formError()) {
+      <p class="invite-error" role="alert">{{ formError() }}</p>
+    }
+  </div>
+
+  <ng-template #footer>
+    <button type="button" class="btn-secondary" (click)="dialogVisible.set(false)">Annuler</button>
+    <button type="button" class="btn-primary" [disabled]="formSubmitting()" (click)="submitForm()">
+      {{ formSubmitting() ? 'Enregistrement...' : 'Enregistrer' }}
+    </button>
+  </ng-template>
+</p-dialog>
