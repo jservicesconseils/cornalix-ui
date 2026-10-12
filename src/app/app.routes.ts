@@ -50,6 +50,13 @@ export const routes: Routes = [
         path: 'users',
         loadComponent: () => import('./features/users/users').then((m) => m.Users),
       },
+      {
+        // Ecran d'administration du catalogue de questions -- disponible
+        // a tout le monde pour l'instant (tests), sera restreint au role
+        // OWNER plus tard.
+        path: 'settings/questions',
+        loadComponent: () => import('./features/settings/questions-admin/questions-admin').then((m) => m.QuestionsAdmin),
+      },
     ],
   },
   { path: '**', redirectTo: 'login' },

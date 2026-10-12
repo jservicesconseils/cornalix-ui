@@ -21,14 +21,17 @@ interface NavItem {
   roles?: UserRole[];
 }
 
-// "Parametres" retire (SCRUM-53) : lien mort (disabled, sans route
-// enregistree) visible en permanence sans aucun ecran derriere.
+// "Parametres" retire en SCRUM-53 (lien mort, sans route enregistree) --
+// reintroduit ici avec un vrai ecran derriere (administration du
+// catalogue de questions). Pas de restriction de role pour l'instant
+// (phase de test) -- sera reserve au role OWNER plus tard.
 const NAV_ITEMS: NavItem[] = [
   { label: 'nav.dashboard', icon: 'pi pi-home', route: '/dashboard' },
   { label: 'nav.portfolio', icon: 'pi pi-briefcase', route: '/portfolio', roles: ['CONSULTANT'] },
   { label: 'nav.questionnaire', icon: 'pi pi-list-check', route: '/questionnaire' },
   { label: 'nav.reports', icon: 'pi pi-chart-bar', route: '/reports' },
   { label: 'nav.users', icon: 'pi pi-users', route: '/users', roles: ['ADMIN_PME', 'CONSULTANT'] },
+  { label: 'nav.settings', icon: 'pi pi-cog', route: '/settings/questions' },
 ];
 
 @Component({
