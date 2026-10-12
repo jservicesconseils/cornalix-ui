@@ -29,6 +29,11 @@ export class Questionnaire {
   protected readonly selectedCategoryKey = signal<NistFunctionKey>(QUESTION_CATEGORIES[0].key);
   protected readonly selectedIndex = signal(0);
 
+  // Vrai des qu'il n'y a aucune organisation courante -- cas reel d'un
+  // Consultant fraichement inscrit, avant qu'aucune organisation cliente
+  // ne lui ait donne acces (portefeuille vide, SCRUM-41/45).
+  protected readonly hasOrganization = computed(() => this.currentOrganizationId() !== null);
+
   constructor() {
     // Reagit a la fois au chargement initial du portefeuille et a un
     // changement d'organisation (ex. Consultant qui bascule de client
@@ -37,6 +42,10 @@ export class Questionnaire {
     effect(() => {
       const organizationId = this.currentOrganizationId();
       if (!organizationId) {
+        // Bug corrige : loading demarrait a true et rien ne le remettait
+        // jamais a false dans ce cas, spinner infini au lieu de l'etat
+        // vide gere par le gabarit (hasOrganization()).
+        this.loading.set(false);
         return;
       }
 

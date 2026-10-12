@@ -144,6 +144,14 @@ a {
   }
 }
 
+// Partage par Portefeuille (deja la, SCRUM-43), Tableau de bord,
+// Questionnaire et Rapport (etat "aucune organisation accessible" --
+// Consultant sans portefeuille, SCRUM-41/45).
+.empty-state {
+  color: var(--ink-faint);
+  font-size: 14px;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;

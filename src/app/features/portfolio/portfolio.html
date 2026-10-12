@@ -3,10 +3,6 @@
     <h1>Mes organisations</h1>
     <p class="page-subtitle">{{ portfolio().length }} organisations sous votre portefeuille</p>
   </div>
-  <button type="button" class="btn-primary">
-    <i class="pi pi-plus"></i>
-    Ajouter
-  </button>
 </div>
 
 <div class="search-row">
@@ -34,7 +30,14 @@
         <span class="org-score" [class]="'org-score--' + scoreLevel(org.score)">{{ org.score }}%</span>
       </button>
     } @empty {
-      <p class="empty-state">Aucune organisation ne correspond à votre recherche.</p>
+      @if (portfolio().length === 0) {
+        <p class="empty-state">
+          Aucune organisation ne vous a encore donné accès. Une organisation cliente peut vous ajouter depuis son
+          écran Utilisateurs.
+        </p>
+      } @else {
+        <p class="empty-state">Aucune organisation ne correspond à votre recherche.</p>
+      }
     }
   </div>
 </app-async-state>

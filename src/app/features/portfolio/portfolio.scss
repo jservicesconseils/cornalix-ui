@@ -107,10 +107,8 @@
   }
 }
 
-.empty-state {
-  color: var(--ink-faint);
-  font-size: 14px;
-}
+// .empty-state deplace dans styles.scss (partage avec dashboard/
+// questionnaire/report, SCRUM-41/45)
 
 @media (max-width: 400px) {
   .org-grid {
