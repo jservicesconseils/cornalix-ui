@@ -46,7 +46,6 @@
     <div>
       <div class="stat-value mono">{{ answeredCount() }} / {{ totalCount() }}</div>
       <div class="stat-label">Questions répondues</div>
-      <div class="stat-delta positive"><svg lucideCheck [size]="12"></svg>70 %</div>
     </div>
   </div>
 
@@ -81,7 +80,6 @@
     <div>
       <div class="stat-value mono">{{ nistDomainsTotal }}</div>
       <div class="stat-label">Domaines NIST</div>
-      <div class="stat-delta positive"><svg lucideCheck [size]="12"></svg>100 %</div>
     </div>
   </div>
 
@@ -101,7 +99,6 @@
     <div>
       <div class="stat-value mono">{{ cisControlsCoveredCount() }}</div>
       <div class="stat-label">Contrôles CIS</div>
-      <div class="stat-delta positive"><svg lucideCheck [size]="12"></svg>100 %</div>
     </div>
   </div>
 </div>
@@ -133,7 +130,7 @@
         </div>
       }
     </div>
-    <a class="see-all" routerLink="/rapports">Voir les 18 contrôles <svg lucideArrowRight [size]="13"></svg></a>
+    <a class="see-all" routerLink="/reports">Voir les 18 contrôles <svg lucideArrowRight [size]="13"></svg></a>
   </div>
 
   <div class="card">
@@ -151,7 +148,7 @@
         </span>
         <svg lucideArrowRight [size]="13"></svg>
       </a>
-      <a routerLink="/rapports">
+      <a routerLink="/reports">
         <span class="quick-action-label">
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
             <rect x="4" y="12" width="4" height="9" rx="1" fill="#2DBE9A" stroke="#0F1E38" stroke-width="1.6" />
@@ -162,7 +159,7 @@
         </span>
         <svg lucideArrowRight [size]="13"></svg>
       </a>
-      <a routerLink="/utilisateurs">
+      <a routerLink="/users">
         <span class="quick-action-label">
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
             <circle cx="16" cy="9" r="3" fill="#2DBE9A" stroke="#0F1E38" stroke-width="1.5" />

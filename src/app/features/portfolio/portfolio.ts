@@ -89,6 +89,6 @@ export class Portfolio {
 
   protected open(organizationId: string): void {
     this.store.dispatch(TenantActions.selectOrganization({ organizationId }));
-    this.router.navigate(['/tableau-de-bord']);
+    this.router.navigate(['/dashboard']);
   }
 }

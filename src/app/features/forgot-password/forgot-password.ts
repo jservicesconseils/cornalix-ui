@@ -29,7 +29,7 @@ export class ForgotPassword {
       // n'existe pas (voir AuthService.forgotPassword) -- rien a
       // distinguer cote UI entre les deux cas.
       await this.authService.forgotPassword(email);
-      this.router.navigate(['/reinitialiser-mot-de-passe'], { queryParams: { email } });
+      this.router.navigate(['/reset-password'], { queryParams: { email } });
     } finally {
       this.submitting.set(false);
     }

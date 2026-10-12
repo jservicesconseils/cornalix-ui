@@ -38,7 +38,7 @@ export class Login {
     this.submitting.set(true);
     try {
       await this.authService.login(this.email().trim(), this.password());
-      this.router.navigate(['/tableau-de-bord']);
+      this.router.navigate(['/dashboard']);
     } catch (error) {
       this.errorMessage.set(
         error instanceof LoginFailedError ? error.message : 'La connexion a échoué. Réessayez.',

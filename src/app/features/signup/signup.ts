@@ -70,7 +70,7 @@ export class Signup {
           : { accountType: 'CONSULTANT', email, password: this.password() },
       );
 
-      this.router.navigate(['/confirmer-inscription']);
+      this.router.navigate(['/confirm-signup']);
     } catch (error) {
       this.errorMessage.set(error instanceof SignUpFailedError ? error.message : "La création du compte a échoué.");
     } finally {
